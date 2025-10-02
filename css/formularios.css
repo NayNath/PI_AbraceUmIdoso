@@ -1,0 +1,101 @@
+body {
+    font-family: 'Asap', sans-serif; 
+    margin: 0;
+    padding: 0;
+    background-image: url('./../imagem/jovemIdosa.png'); 
+    background-size: cover;
+    background-position: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/*
+    
+}*/
+.cadastro {
+    background-color: rgba(255, 255, 255, 0.7); /* Fundo semi-transparente e claro */
+    padding: 20px 60px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra mais forte */
+    width: 80%; 
+    max-width: 900px;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    backdrop-filter: blur(2px); /* Efeito de desfoque sutil no fundo, como na imagem */
+}
+
+.cadastro h1 {
+    text-align: center;
+    color: #5C3724; /* Marrom escuro */
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.cadastro form {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.coluna-esquerda,
+.coluna-direita {
+    flex: 1;
+    min-width: 350px; 
+}
+
+/* --- ESTILOS DOS CAMPOS DO FORMULÁRIO --- */
+.cadastro label {
+    display: block;
+    color: #444;
+    font-weight: 400;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.cadastro input[type="text"],
+.cadastro input[type="email"],
+.cadastro input[type="date"],
+.cadastro input[type="tel"],
+.cadastro input[type="password"],
+.cadastro textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; 
+    font-size: 1em;
+    background-color: rgba(255, 255, 255, 0.95); /* Quase branco */
+}
+
+/* Estilo para o campo Fale sobre Você (textarea) */
+.cadastro textarea {
+    /* Altura ajustada para cobrir os campos da coluna da direita */
+    height: calc((12px + 12px + 1px + 5px) * 7 + 15px); 
+    resize: none; 
+    margin-top: 5px; 
+} 
+
+#foto-perfil {
+    display: none;
+}
+.coluna-esquerda label[for="foto-perfil"] {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px auto;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+}
