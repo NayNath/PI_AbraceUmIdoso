@@ -44,49 +44,34 @@
             <input type="file" id="foto-perfil" name="foto" accept="image/*" required>
             
             <label for="sobreVc">Fale sobre você:</label><br>
-            <input type="text" name="sobreVc" id="sobreVc"><br>
+            <textarea name="sobreVc" id="sobreVc"></textarea>
         </div>
         <div class="coluna-direita">
-            <label for="nome">Nome:</label><br>
-            <input type="text" name="nome" id="name"><br>
+            <div class="input-grupo"><label for="nome">Nome:</label><input type="text" name="nome" id="name"></div>
+            <div class="input-grupo"><label for="email">E-mail:</label><input type="email" name="email" id="email"></div>
+            <div class="input-grupo"><label for="dtNascimento">Data Nascimento:</label><input type="date" name="dtNascimento" id="dtNascimento"></div>
+            <div class="input-grupo"><label for="CPF">CPF:</label><input type="text" name="CPF" id="CPF"></div>
+            <div class="input-grupo"><label for="telefone">Telefone:</label><input type="tel" name="telefone" id="telefone" maxlength="12"></div>
 
-            <label for="email">E-mail:</label><br>
-            <input type="email" name="email" id="email"><br>
+            <div class="input-linha">
+                <div class="input-grupo input-pequeno"><label for="cep">CEP:</label><input type="text" name="cep" id="cep"></div>
+                <div class="input-grupo"><label for="cidade">Cidade:</label><input type="text" name="cidade" id="cidade"></div>
+                <div class="input-grupo input-pequeno"><label for="bairro">Bairro:</label><input type="text" name="bairro" id="bairro"></div>
+                <div class="input-grupo input-mini"><label for="estado">Estado:</label><input type="text" name="estado" id="estado"></div>
+            </div>
 
-            <label for="dtNascimento">Data nascimento:</label><br>
-            <input type="date" name="dtNascimento" id="dtNascimento"><br>
-
-            <label for="CPF">CPF:</label><br>
-            <input type="text" name="CPF" id="CPF"><br>
-
-            <label for="telefone">Telefone:</label><br>
-            <input type="tel" name="telefone" id="telefone" maxlength="12"><br>
-<br>
-            <label for="cep">CEP:</label>
-            <input type="text" name="cep" id="cep">
-            <label for="endereco">Endereço:</label>
-            <input type="text" name="endereco" id="endereco">
-            <label for="estado">Estado:</label>
-            <input type="text" name="estado" id="estado">
-            <label for="cidade">Cidade:</label>
-            <input type="text" name="cidade" id="cidade">
-            <label for="numbEnde">Número:</label>
-            <input type="text" name="numbEnde" id="numbEnde">
-<br>
-            <label for="senha">Senha:</label><br>
-            <input type="password" name="senha" id="senhaCPF"><br>
-
-            <label for="senha">Confirmar senha:</label><br>
-            <input type="password" name="senha" id="senha"><br>
+            <div class="input-linha">
+                <div class="input-grupo input-grande"><label for="rua">Rua:</label><input type="text" name="rua" id="rua"></div>
+                <div class="input-grupo input-mini"><label for="numero">Número:</label><input type="text" name="numero" id="numero"></div>
+                <div class="input-grupo input-grande"><label for="compremento">Complemento:</label><input type="text" name="compremento" id="compremento"></div>
+            </div>
+            
+            <div class="input-grupo"><label for="senha">Senha:</label><input type="password" name="senha" id="senhaCPF"></div>
+            <div class="input-grupo"><label for="confirmar-senha">Confirmar senha:</label><input type="password" name="confirmar-senha" id="confirmar-senha"></div>
         </div>
-
         <button type="submit" class="btn btn-marrom">Cadastrar</button>
     </form>
 </div>
-
-
-
-
 
     <footer class="rodape"><p>© 2025 RastroCerto. Todos os direitos reservados</p></footer>
 </body>

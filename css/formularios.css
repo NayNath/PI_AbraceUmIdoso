@@ -10,24 +10,21 @@ body {
     min-height: 100vh;
 }
 
-/*
-    
-}*/
+/* --- ESTILOS DO CONTAINER PRINCIPAL DO FORMULÁRIO (.cadastro) --- */
 .cadastro {
-    background-color: rgba(255, 255, 255, 0.7); /* Fundo semi-transparente e claro */
-    padding: 20px 60px;
+    background-color: rgba(255, 255, 255, 0.75); 
+    padding: 40px 60px; 
     text-align: center;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra mais forte */
-    width: 80%; 
-    max-width: 900px;
-    margin-top: 10px; 
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); 
+    width: 90%; 
+    /* Aumentado de 950px para 1100px para ser mais largo */
+    max-width: 1100px; 
+    margin: 40px auto; 
     box-sizing: border-box;
-    backdrop-filter: blur(2px); /* Efeito de desfoque sutil no fundo, como na imagem */
+    backdrop-filter: blur(5px); 
 }
+
 
 .cadastro h1 {
     text-align: center;
@@ -43,23 +40,37 @@ body {
     display: flex;
     flex-wrap: wrap; 
     justify-content: space-between;
-    gap: 20px;
+    gap: 40px; /* Aumenta a distância entre as colunas */
+    align-items: flex-start; /* Alinha o topo das colunas */
 }
 
-.coluna-esquerda,
+.coluna-esquerda {
+    flex-basis: 350px; /* Largura fixa para a coluna da esquerda */
+    flex-grow: 0;
+    text-align: left;
+}
+
 .coluna-direita {
-    flex: 1;
-    min-width: 350px; 
+    flex: 1; /* Preenche o espaço restante */
+    min-width: 450px; 
+    text-align: left;
 }
 
-/* --- ESTILOS DOS CAMPOS DO FORMULÁRIO --- */
+/* --- ESTILOS DOS CAMPOS DO FORMULÁRIO (Labels, Inputs) --- */
+
+/* Wrapper para cada campo na coluna direita */
+.input-grupo {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .cadastro label {
     display: block;
-    color: #444;
-    font-weight: 400;
+    color: #5f3a24; /* Marrom para contraste */
+    font-weight: 600; /* Mais destacado */
     margin-top: 15px;
     margin-bottom: 5px;
-    font-size: 1.1em;
+    font-size: 0.9em;
 }
 
 .cadastro input[type="text"],
@@ -69,33 +80,101 @@ body {
 .cadastro input[type="password"],
 .cadastro textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
+    padding: 10px 15px; /* Padding ajustado */
+    border: 1px solid #c8b99c; /* Borda mais suave */
     border-radius: 5px;
     box-sizing: border-box; 
     font-size: 1em;
-    background-color: rgba(255, 255, 255, 0.95); /* Quase branco */
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #5f3a24;
 }
 
 /* Estilo para o campo Fale sobre Você (textarea) */
 .cadastro textarea {
-    /* Altura ajustada para cobrir os campos da coluna da direita */
-    height: calc((12px + 12px + 1px + 5px) * 7 + 15px); 
+    width: 100%; /* Define a largura para metade (50%) do seu contêiner pai */
+    height: 20vh; /* Define a altura para 20% da altura da viewport (janela do navegador) */
     resize: none; 
     margin-top: 5px; 
+    padding: 8px 15px;
 } 
 
-#foto-perfil {
-    display: none;
+/* --- Layout para campos na mesma linha (Endereço) --- */
+.input-linha {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px; /* Espaçamento entre as linhas de endereço */
 }
-.coluna-esquerda label[for="foto-perfil"] {
+.input-linha .input-grupo {
+    margin-bottom: 0; /* Remove margem desnecessária entre campos na mesma linha */
+}
+
+/* Definindo larguras relativas para os campos de endereço */
+.input-mini { flex-basis: 15%; }
+.input-pequeno { flex-basis: 25%; }
+.input-grande { flex-basis: 45%; }
+
+
+/* --- ÍCONE DE PERFIL --- */
+#foto-perfil {
+    display: none; /* Esconde o input file padrão */
+}
+
+.foto-perfil-container {
+    /* O container do label para a foto */
+    position: relative;
     display: block;
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
     margin: 0 auto 20px auto;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-radius: 50%;
     overflow: hidden; 
+    background-color: #5f3a24; /* Cor de fundo do círculo */
+    border: 4px solid #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.foto-perfil-container img {
+    /* A imagem dentro do círculo - (se for uma imagem de placeholder) */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ajuste de cor/filtro para a imagem de placeholder (ícone) */
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    padding: 15px; /* Para o ícone não grudar na borda */
+}
+
+.icone-adicionar {
+    /* O círculo branco com o sinal de adição */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: #fff; 
+    border-radius: 50%;
+    border: 2px solid #5f3a24;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    /* Desenha o sinal de + usando pseudo-elementos */
+}
+.icone-adicionar::before,
+.icone-adicionar::after {
+    content: '';
+    position: absolute;
+    background-color: #5f3a24;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.icone-adicionar::before {
+    width: 14px; /* Linha horizontal */
+    height: 2px;
+}
+.icone-adicionar::after {
+    width: 2px; /* Linha vertical */
+    height: 14px;
+}
+
+.btn-cadastro:hover {
+    background-color: #7a4b33;
 }

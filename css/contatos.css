@@ -2,10 +2,10 @@
     height: 400px;
     background-image: url('./../imagem/jovemIdosa.png'); 
     background-size: cover;
-    background-position: center;
+    background-position: 50% 25%;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Alinha o texto à esquerda, como na imagem */
+    justify-content: center; /* Alinha o texto à esquerda, como na imagem */
     color: white; 
     text-align: left;
     margin-bottom: 50px;
@@ -13,13 +13,13 @@
 }
 
 .imgContato h1 {
-    font-size: 3.8em;
+    font-size: 4.8em;
     font-weight: bold;
     margin: 0;
     text-shadow: 7px 7px 8px rgba(0, 0, 0, 0.6); 
     line-height: 1.1; 
     font-family: 'Asap', sans-serif;
-    max-width: 800px; /* Limita a largura do texto para evitar que se espalhe muito */
+    max-width: 1500px; /* Limita a largura do texto para evitar que se espalhe muito */
 }
 
 
