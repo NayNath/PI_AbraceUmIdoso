@@ -10,7 +10,7 @@ $validar = new ValidarEntradas();
  
  
 if($_SERVER['REQUEST_METHOD']==='POST'){
-        $nomePessoa = trim($_POST['nomePessoa']);
+        $nomePessoa = trim(ucwords($_POST['nomePessoa']));
         $cpf = trim($_POST['cpf']);
         $dateNascimento = trim($_POST['dateNascimento']);
         $fotoPerfil = trim($_POST['fotoPerfil']);
@@ -19,10 +19,10 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $email = trim($_POST['email']);
         $telefone = trim($_POST['telefone']);
         $cep = trim($_POST['cep']);
-        $cidade = trim($_POST['cidade']);
-        $bairro = trim($_POST['bairro']);
+        $cidade = trim(ucwords($_POST['cidade']));
+        $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
-        $rua = trim($_POST['rua']);
+        $rua = trim(ucwords($_POST['rua']));
         $nomeLogradouro = trim($_POST['nomeLogradouro']);
         $tipoLogradouro = trim($_POST['tipoLogradouro']);
         $numero = trim($_POST['numero']);
