@@ -1,4 +1,14 @@
 <?php
+/*editar: foto, Sobre mim, celular/telefone, email, cep,estado, cidade, bairro, rua, numero*/
+require '../conexao.php';
+
+$sql = "SELECT * FROM usuarios";
+
+// Executa o comando SQL diretamente, pois não há parâmetros
+$stmt = $pdo->query($sql);
+
+// Pega todos os resultados da consulta e transforma em um array (lista)
+$usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -38,6 +48,32 @@
             </ul>
         </nav>
     </header>
+        <tbody>
+            <?php foreach ($usuarios as $u): ?>
+            <tr>
+                <td><?= $u['fotoPerfil'] ?></td>
+                <td><?= $u['nomePessoa'] ?></td>
+                <td><?= $u['sobre'] ?></td>
+                <td><?= $u['cep'] ?></td>
+                <td><?= $u['estado'] ?></td>
+                <td><?= $u['cidade'] ?></td>
+                <td><?= $u['bairro'] ?></td>
+                <td><?= $u['numero'] ?></td>
+                <td><?= $u['rua'] ?></td>
+                <td><?= $u['senha'] ?></td>
+
+                <td><?= ucfirst($u['tipo']) ?></td>
+                <td>
+                    <a class="btn-editar" href="editar.php?id=<?= $u['idUsuario'] ?>">Editar</a>
+                    <a class="btn-excluir" href="excluir.php?id=<?= $u['idUsuario'] ?>" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+
+
+
+
 
     <footer class="rodape"><p>© 2025 RastroCerto. Todos os direitos reservados</p></footer>
 </body>
