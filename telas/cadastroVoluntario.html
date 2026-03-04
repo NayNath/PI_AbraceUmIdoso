@@ -39,15 +39,35 @@
     <h1>SEJA UM VOLUNTÁRIO</h1>
     <form action="./../cadastroVoluntario.php" method="post">
  
-        <div class="coluna-esquerda">
-            <label for="fotoPerfil" ><img src="./../imagem/fotoPerfil.png" alt=""></label>
-            <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" required>
-           
-            <label for="sobre">Fale sobre você:</label><br>
-            <textarea name="sobre" id="sobre"></textarea>
-                <?php if(isset($erros['sobre'])): ?>
-                <span class="erro"><?= $erros['sobre']; ?></span>
-                <?php endif; ?>
+        <div class="coluna-esquerda-container">
+                <div class="coluna-esquerda-foto">
+                    <div class="foto-perfil-container">
+                        <label for="fotoPerfil">
+                            <img src="./../imagem/fotoPerfil.png" alt="foto-de-perfil" id="preview-img">
+                            <div class="icone-adicionar"></div>
+                        </label>
+                    </div>
+                    <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" required style="display: none;">
+                </div>
+                <script>
+                    const inputFoto = document.getElementById('fotoPerfil');
+                    const previewImg = document.getElementById('preview-img');
+                    inputFoto.addEventListener('change', function() {
+                        const arquivo = this.files[0]; // Pega o arquivo selecionado
+                        if (arquivo) {
+                            const leitor = new FileReader();
+                            leitor.onload = function(e) {
+                                // Atualiza o src da imagem com o conteúdo do arquivo
+                                previewImg.src = e.target.result;
+                            }
+                            leitor.readAsDataURL(arquivo);
+                        }
+                    });
+                </script>
+                <div class="coluna-esquerda">
+                    <label for="sobre">Fale sobre você:</label><br>
+                    <textarea name="sobre" id="sobre"></textarea>
+                </div>
         </div>
         <div class="coluna-direita">
             <div class="input-grupo"><label for="nomePessoa">Nome:</label><input type="text" name="nomePessoa" id="nomePessoa" ></div>
@@ -148,6 +168,7 @@
                 <span class="erro"><?= $erros['confirmarSenha']; ?></span>
                 <?php endif; ?>
         </div>
+        
         <button type="submit" class="btn btn-marrom">Cadastrar</button>
     </form>
 </div>
