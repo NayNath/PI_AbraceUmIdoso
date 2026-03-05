@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $dateNascimento = trim($_POST['dateNascimento']);
         $fotoPerfil = trim($_POST['fotoPerfil']);
         $sobre = trim($_POST['sobre']);
-        $celular = trim($_POST['celular']);
+        $celular = trim($_POST['celular']);;
         $email = trim($_POST['email']);
         $telefone = trim($_POST['telefone']);
         $cep = trim($_POST['cep']);
@@ -23,8 +23,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
         $rua = trim(ucwords($_POST['rua']));
-        $nomeLogradouro = trim($_POST['nomeLogradouro']);
-        $tipoLogradouro = trim($_POST['tipoLogradouro']);
+        //$nomeLogradouro = null;//trim($_POST['nomeLogradouro']);
+        //$tipoLogradouro = null;//trim($_POST['tipoLogradouro']);
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
@@ -38,7 +38,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
         $validar->obrigatorio('email',$email);
-        $validar->obrigatorio('telefone',$telefone);
         $validar->obrigatorio('cep',$cep);
         $validar->obrigatorio('cidade',$cidade);
         $validar->obrigatorio('bairro',$bairro);
@@ -99,7 +98,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         if($validar->temErros()){
                 $erros = $validar->getErros();
-                header("Location: ./front/cadastro.html");
+                header("Location: ./telas/cadastroVoluntario.html");
         }else{
 
 
@@ -143,8 +142,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,nomeLogradouro,tipoLogradouro,complemento)
-                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:nomeLogradouro,:tipoLogradouro,:complemento)");
+                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,complemento)
+                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:complemento)");
 
 
                         $stmt->execute([':cep'=>$cep,
@@ -153,8 +152,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                                                 ':bairro'=>$bairro,
                                                 ':numero'=>$numero,
                                                 ':rua'=>$rua,
-                                                ':nomeLogradouro'=>$nomeLogradouro,
-                                                ':tipoLogradouro'=>$tipoLogradouro,
+                                                //':nomeLogradouro'=>$nomeLogradouro,
+                                                //':tipoLogradouro'=>$tipoLogradouro,
                                                 ':complemento'=>$complemento]);
                                        
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido

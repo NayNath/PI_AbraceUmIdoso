@@ -18,8 +18,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
         $rua = trim(ucwords($_POST['rua']));
-        $nomeLogradouro = null;
-        $tipoLogradouro = null;
+        //$nomeLogradouro = null;
+        //$tipoLogradouro = null;
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
@@ -62,7 +62,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         // ---------------------------------------- Checar se o damanho esta certo (cep,telefone,celular,cpf,estado)----------------------------------------
         $validar->tamanhoExato('cnpj',$cnpj,14);
-        $validar->tamanhoExato('celular',$celular,11);
+        //$validar->tamanhoExato('celular',$celular,11);
         $validar->tamanhoExato('telefone',$telefone, 11);
         $validar->tamanhoExato('cep',$cep, 8);
         $validar->tamanhoExato('estado',$estado, 2);
@@ -76,7 +76,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         if($validar->temErros()){
                 $erros = $validar->getErros();
-                header("Location: ./front/cadastro.html");
+                header("Location: ./cadastroInstituicao.html");
         }else{
                 try{       
 
@@ -92,8 +92,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $idContatos = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,nomeLogradouro,tipoLogradouro,complemento)
-                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:nomeLogradouro,:tipoLogradouro,:complemento)");
+                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,complemento)
+                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:complemento)");
 
                         $stmt->execute([':cep'=>$cep,
                                                 ':estado'=>$estado,
@@ -101,8 +101,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                                                 ':bairro'=>$bairro,
                                                 ':numero'=>$numero,
                                                 ':rua'=>$rua,
-                                                ':nomeLogradouro'=>$nomeLogradouro,
-                                                ':tipoLogradouro'=>$tipoLogradouro,
+                                                //':nomeLogradouro'=>$nomeLogradouro,
+                                                //':tipoLogradouro'=>$tipoLogradouro,
                                                 ':complemento'=>$complemento]);
                                        
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
