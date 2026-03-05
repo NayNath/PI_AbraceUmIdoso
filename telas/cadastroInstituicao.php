@@ -9,8 +9,8 @@ $validar = new ValidarEntradas();
 if($_SERVER['REQUEST_METHOD']==='POST'){
         $nomeInstituicao = trim(ucwords($_POST['nomeInstituicao']));
         $cnpj = trim($_POST['cnpj']);
-        $fotoPerfil = trim($_POST['fotoPerfil']);
-        $celular = null;
+        $fotoInstituicao = trim($_POST['fotoInstituicao']);
+        $celular = "12345678912";
         $email = trim($_POST['email']);
         $telefone = trim($_POST['telefone']);
         $cep = trim($_POST['cep']);
@@ -28,7 +28,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         $validar->obrigatorio('nomeInstituicao',$nomeInstituicao);
         $validar->obrigatorio('cnpj',$cnpj);
-        $validar->obrigatorio('fotoPerfil',$fotoPerfil);
+        $validar->obrigatorio('fotoInstituicao',$fotoInstituicao);
         $validar->obrigatorio('email',$email);
         $validar->obrigatorio('telefone',$telefone);
         $validar->obrigatorio('cep',$cep);
@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         // ---------------------------------------- Checar tamanho maximo ----------------------------------------
         $validar->tamanhoMax('nomeInstituicao',$nomeInstituicao, 50);
-        $validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
+        $validar->tamanhoMax('fotoInstituicao',$fotoInstituicao,250);
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
         $validar->tamanhoMax('bairro',$bairro, 50);
@@ -108,16 +108,15 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================INSTITUICAO======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO instituicao(fotoPerfil,nomeInstituicao,cnpj,senha,idContatos,idEndereco,idPessoa)
-                        VALUES (:fotoPerfil,:nomeInstituicao,:cnpj,:senha,:idContatos,:idEndereco,:idPessoa)");
+                        $stmt = $pdo->prepare("INSERT INTO instituicao(fotoInstituicao,nomeInstituicao,cnpj,senha,idContatos,idEndereco)
+                        VALUES (:fotoInstituicao,:nomeInstituicao,:cnpj,:senha,:idContatos,:idEndereco)");
 
                         $stmt->execute([':nomeInstituicao'=>$nomeInstituicao,
-                                                ':fotoPerfil'=>$fotoPerfil,
+                                                ':fotoInstituicao'=>$fotoInstituicao,
                                                 ':cnpj'=>$cnpj,
                                                 ':senha'=>password_hash($senha, PASSWORD_DEFAULT),
                                                 ':idContatos'=>$idContatos,
-                                                ':idEndereco'=>$idEndereco,
-                                                ':idPessoa'=>$idPessoa]);
+                                                ':idEndereco'=>$idEndereco]);
                        
                         $idInstituicao = $pdo->lastInsertId();
 
