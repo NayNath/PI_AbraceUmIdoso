@@ -1,14 +1,12 @@
 <?php
 /*editar: foto, Sobre mim, celular/telefone, email, cep,estado, cidade, bairro, rua, numero*/
-require '../conexao.php';
+require_once "../conexao/conexao.php";
 
-$sql = "SELECT * FROM usuarios";
+$sql = "SELECT * FROM voluntarios";
 
-// Executa o comando SQL diretamente, pois não há parâmetros
 $stmt = $pdo->query($sql);
 
-// Pega todos os resultados da consulta e transforma em um array (lista)
-$usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$voluntarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -64,15 +62,11 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <td><?= ucfirst($u['tipo']) ?></td>
                 <td>
-                    <a class="btn-editar" href="editar.php?id=<?= $u['idUsuario'] ?>">Editar</a>
-                    <a class="btn-excluir" href="excluir.php?id=<?= $u['idUsuario'] ?>" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
+                    <a class="btn-editar" href="editarVoluntario?id=<?= $u['idUsuario'] ?>">Editar</a>
                 </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
-
-
-
 
 
     <footer class="rodape"><p>© 2025 RastroCerto. Todos os direitos reservados</p></footer>
