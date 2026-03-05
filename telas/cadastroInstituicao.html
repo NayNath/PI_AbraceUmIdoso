@@ -27,7 +27,7 @@
             <li><a href="/login" class="ga-nav" title="agendamento">Login</a></li>
         </ul>
         <ul>
-            <li><a href="./inicio.html">Início</a></li>
+            <li><a href="../index.html">Início</a></li>
             <li><a href="/agendamento" class="ga-nav" title="agendamento">Agendamento</a></li>
             <li><a href="/cartas" class="ga-nav" title="cartas">Cartas</a></li>
             <li><a href="./contatos.html" class="ga-nav" title="contato">Fale Conosco</a></li>
@@ -37,7 +37,7 @@
  
 <div class="cadastro">
     <h1>SEJA UMA INSTITUIÇÃO PARCEIRA</h1>
-    <form action="./cadastroInstituicao.php" method="post">
+    <form action="/telas/cadastroInstituicao.php" method="post">
  
         <div class="coluna-esquerda-foto">
             <div class="foto-perfil-container">
@@ -46,10 +46,10 @@
                     <div class="icone-adicionar"></div>
                 </label>
             </div>
-            <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" required style="display: none;">
+            <input type="file" id="fotoInstituicao" name="fotoInstituicao" accept="image/*" required style="display: none;">
         </div>
         <script>
-            const inputFoto = document.getElementById('fotoPerfil');
+            const inputFoto = document.getElementById('fotoInstituicao');
             const previewImg = document.getElementById('preview-img');
 
             inputFoto.addEventListener('change', function() {

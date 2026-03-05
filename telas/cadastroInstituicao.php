@@ -1,8 +1,8 @@
 <?php
-require_once "./conexao/conexao.php";
-require_once "./Classes/Contatos.php";
-require_once "./Classes/Enderecos.php";
-require_once "./Classes/ValidarEntradas.php";
+require_once "../conexao/conexao.php";
+require_once "../classes/Contatos.php";
+require_once "../classes/Enderecos.php";
+require_once "../classes/ValidarEntradas.php";
 
 $validar = new ValidarEntradas(); 
  
@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $nomeInstituicao = trim(ucwords($_POST['nomeInstituicao']));
         $cnpj = trim($_POST['cnpj']);
         $fotoPerfil = trim($_POST['fotoPerfil']);
-        $celular = trim($_POST['celular']);
+        $celular = null;
         $email = trim($_POST['email']);
         $telefone = trim($_POST['telefone']);
         $cep = trim($_POST['cep']);
@@ -18,8 +18,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
         $rua = trim(ucwords($_POST['rua']));
-        $nomeLogradouro = trim($_POST['nomeLogradouro']);
-        $tipoLogradouro = trim($_POST['tipoLogradouro']);
+        $nomeLogradouro = null;
+        $tipoLogradouro = null;
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);

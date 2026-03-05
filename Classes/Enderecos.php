@@ -1,5 +1,5 @@
 <?php
-require_once "./conexao/conexao.php";
+require_once "../conexao/conexao.php";
 class Enderecos {
     public string $cep, $estado, $cidade, $bairro, $numero,$rua, $nomeLogradouro, $tipoLogradouro;
 

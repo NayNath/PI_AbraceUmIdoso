@@ -1,5 +1,5 @@
 <?php
-require_once "./conexao/conexao.php";
+require_once "../conexao/conexao.php";
 class Contatos {
     private string $email, $celular, $telefone;
 
