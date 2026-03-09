@@ -18,8 +18,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
         $rua = trim(ucwords($_POST['rua']));
-        //$nomeLogradouro = null;
-        //$tipoLogradouro = null;
+        $nomeLogradouro = "null";
+        $tipoLogradouro = "null";
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
@@ -92,8 +92,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $idContatos = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,complemento)
-                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:complemento)");
+                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,nomeLogradouro,tipoLogradouro,complemento)
+                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:nomeLogradouro,:tipoLogradouro,:complemento)");
 
                         $stmt->execute([':cep'=>$cep,
                                                 ':estado'=>$estado,
@@ -101,8 +101,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                                                 ':bairro'=>$bairro,
                                                 ':numero'=>$numero,
                                                 ':rua'=>$rua,
-                                                //':nomeLogradouro'=>$nomeLogradouro,
-                                                //':tipoLogradouro'=>$tipoLogradouro,
+                                                ':nomeLogradouro'=>$nomeLogradouro,
+                                                ':tipoLogradouro'=>$tipoLogradouro,
                                                 ':complemento'=>$complemento]);
                                        
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido

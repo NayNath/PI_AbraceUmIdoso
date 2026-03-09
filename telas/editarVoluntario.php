@@ -1,92 +1,161 @@
 <?php
-/*editar: foto, Sobre mim, celular/telefone, email, cep,estado, cidade, bairro, rua, numero*/
-require_once "../conexao/conexao.php";
+//123456*Ty bad@gmail.com
+    session_start();
+    require_once "../conexao/conexao.php";
 
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: listar.php");
-    exit;
-}
+    $idVoluntario = $_SESSION['idVoluntario'];
 
-$id = intval($_GET['id']);
+    $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular, 
+        e.cep, e.cidade, e.estado, e.bairro, e.rua, e.numero, e.complemento
+        FROM voluntarios v
+        INNER JOIN pessoas p ON v.idPessoa = p.idPessoa
+        INNER JOIN contatos c ON v.idContatos = c.idContatos
+        INNER JOIN enderecos e ON v.idEndereco = e.idEndereco
+        WHERE v.idVoluntario = :id";
 
-$sql = "SELECT * FROM voluntarios WHERE idVoluntario = :idVoluntario LIMIT 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id',$idVoluntario);
+    $stmt->execute();
 
-// Prepara o SQL para ser executado com segurança
-$stmt = $pdo->prepare($sql);
+    $dados = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Executa o SQL passando o ID como parâmetro
-$stmt->execute(['idVoluntario' => $idVoluntario]);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //$fotoPerfil = trim($_POST['fotoPerfil']);
+        $sobre = trim($_POST['sobre']);
+        $celular = trim($_POST['celular']);;
+        $email = trim($_POST['email']);
+        $telefone = trim($_POST['telefone']);
+        $cep = trim($_POST['cep']);
+        $cidade = trim(ucwords($_POST['cidade']));
+        $bairro = trim(ucwords($_POST['bairro']));
+        $estado = trim($_POST['estado']);
+        $rua = trim(ucwords($_POST['rua']));
+        $numero = trim($_POST['numero']);
+        $complemento = trim($_POST['complemento']);
+        $senha = trim($_POST['senha']);
 
-// Guarda os dados do usuário encontrados no banco
-$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
+        //$validar->obrigatorio('fotoPerfil',$fotoPerfil);
+        //$validar->obrigatorio('sobre',$sobre);
+        $validar->obrigatorio('celular',$celular);
+        $validar->obrigatorio('email',$email);
+        $validar->obrigatorio('cep',$cep);
+        $validar->obrigatorio('cidade',$cidade);
+        $validar->obrigatorio('bairro',$bairro);
+        $validar->obrigatorio('estado',$estado);
+        $validar->obrigatorio('rua',$rua);
+        $validar->obrigatorio('numero',$numero);
+        $validar->obrigatorio('senha',$senha);
 
-// Se não encontrar nenhum usuário com esse ID, volta para a lista
-if (!$usuario) {
-    header("Location: listar.php");
-    exit;
-}
+        // ---------------------------------------- Checar tamanho maximo ----------------------------------------
+        //$validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
+        $validar->tamanhoMax('sobre',$sobre, 150);
+        $validar->tamanhoMax('email',$email,50);
+        $validar->tamanhoMax('cidade',$cidade, 50);
+        $validar->tamanhoMax('bairro',$bairro, 50);
+        $validar->tamanhoMax('rua',$rua, 50);
+        $validar->tamanhoMax('numero',$numero, 6);
+        $validar->tamanhoMax('senha',$senha, 45);
 
-$mensagem = "";
+        // ---------------------------------------- Checar se o campo é numérico ----------------------------------------
+        $validar->numero('celular',$celular);
+        $validar->numero('telefone',$telefone);
+        $validar->numero('cep',$cep);
+        $validar->numero('numero',$numero);
 
-// Verifica se o formulário foi enviado usando método POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // ---------------------------------------- Checar E-mail (email) ----------------------------------------
+        $validar->email('email',$email);
 
-    // Pega o nome enviado pelo formulário e remove espaços extras
-    $nome = trim($_POST['nomePessoa']);
+        // ---------------------------------------- Checar se o damanho esta certo (cep,telefone,celular,cpf,estado)----------------------------------------
+        $validar->tamanhoExato('celular',$celular,11);
+        $validar->tamanhoExato('telefone',$telefone, 11);
+        $validar->tamanhoExato('cep',$cep, 8);
+        $validar->tamanhoExato('estado',$estado, 2);
 
-    // Pega o e-mail enviado pelo formulário
-    $email = trim($_POST['email']);
+        // ---------------------------------------- Checar string sem número ----------------------------------------
+        $validar->stringSemNumero('estado',$estado);
 
-    // Verifica se o campo senha foi preenchido
-    if (!empty($_POST['senha'])) {
+        // ---------------------------------------- Checar Senha ----------------------------------------
+        $validar->senha($senha, $confirmarSenha);
 
-        // Criptografa a nova senha para armazenar com segurança
-        $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+        if($validar->temErros()){
+                $erros = $validar->getErros();
+                header("Location: editarVoluntario.php");
+        }else{
+                try{
 
-        // Monta o SQL para atualizar todos os dados, incluindo a senha
-        $sql = "UPDATE usuarios SET nome = :nome, email = :email, senha = :senha, tipo = :tipo WHERE id = :id";
+                /*======================================================PESSOAS======================================================*/      
+                    $pdo->beginTransaction();
+                    $stmt = $pdo->prepare("UPDADTE pessoas
+                                                    SET sobre = :sobre
+                                                    WHERE idVoluntario = :id");
 
-        // Cria os valores que serão enviados juntos com o SQL
-        $params = [
-            ':nome' => $nome,
-            ':email' => $email,
-            ':senha' => $senha,
-            ':tipo' => $tipo,
-            ':id' => $id
-        ];
+                    $stmt->execute([':nomePessoa' => $nomePessoa,
+                                                ':cpf'=>$cpf,
+                                                ':dateNascimento'=> $dateNascimento,
+                                                ':fotoPerfil'=> $fotoPerfil,
+                                                ':sobre'=> $sobre]);
 
-    } else {
+                    $idPessoa = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
-        // Se a senha não for preenchida, atualiza apenas nome, email e tipo
-        $sql = "UPDATE usuarios SET nome = :nome, email = :email, tipo = :tipo WHERE id = :id";
+                /*======================================================CONTATOS======================================================*/                            
+                        $stmt = $pdo->prepare("UPDADTE contatos
+                                                        SET email = :email,
+                                                        celular = :celular
+                                                        telefone = :telefone
+                                                        WHERE idVoluntario = :id");
+         
+                        $stmt->execute([':email'=>$email,
+                                                ':celular'=>$celular,
+                                                ':telefone'=>$telefone]);
 
-        // Valores que serão enviados no SQL (sem a senha)
-        $params = [
-            ':nome' => $nome,
-            ':email' => $email,
-            ':tipo' => $tipo,
-            ':id' => $id
-        ];
+                        $idContatos = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
+
+
+                /*======================================================ENDERECOS======================================================*/        
+                        $stmt = $pdo->prepare("UPDADTE enderecos
+                                                        SET cep = :cep,
+                                                        estado = :estado
+                                                        cidade = :cidade
+                                                        bairro = :bairro
+                                                        numero = :numero
+                                                        rua = :rua
+                                                        complemento = :complemento
+                                                        WHERE idVoluntario = :id");
+
+                        $stmt->execute([':cep'=>$cep,
+                                                ':estado'=>$estado,
+                                                ':cidade'=>$cidade,
+                                                ':bairro'=>$bairro,
+                                                ':numero'=>$numero,
+                                                ':rua'=>$rua,
+                                                ':nomeLogradouro'=>$nomeLogradouro,
+                                                ':tipoLogradouro'=>$tipoLogradouro,
+                                                ':complemento'=>$complemento]);
+                                       
+                        $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
+
+                /*======================================================ENDERECOS======================================================*/        
+                        $stmt = $pdo->prepare("UPDADTE contatos
+                                                        SET senha = :senha,
+                                                        WHERE idVoluntario = :id");
+
+                        $stmt->execute([':senha'=>password_hash($senha, PASSWORD_DEFAULT),
+                                                ':idContatos'=>$idContatos,
+                                                ':idEndereco'=>$idEndereco,
+                                                ':idPessoa'=>$idPessoa]);
+                       
+                        $idVoluntario = $pdo->lastInsertId();
+
+                        $pdo->commit();
+                        header("Location: perfilVoluntario.php");
+                } catch (Exception $e) {
+                        $pdo->rollBack();
+                        echo $e->getMessage();
+                }
+        }
+
     }
-
-    try {
-        // Prepara o SQL para ser executado
-        $stmt = $pdo->prepare($sql);
-
-        // Executa o SQL passando os valores coletados
-        $stmt->execute($params);
-
-        // Após salvar as alterações, volta para a lista de usuários
-        header("Location: listar.php");
-        exit;
-
-    } catch (PDOException $e) {
-
-        // Se ocorrer algum erro, cria uma mensagem mostrando o problema
-        $mensagem = "<p class='erro'>Erro ao atualizar: ".$e->getMessage()."</p>";
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -94,9 +163,126 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Perfil voluntário</title>
+    <link rel="stylesheet" href="./../css/estilo.css">
+    <link rel="stylesheet" href="./../css/perfil.css">
+
 </head>
 <body>
-    
+        <head>
+    <meta charset="UTF-8">
+    <title>Seu Título</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+   
+    <link rel="stylesheet" href="caminho/para/seu/style.css">
+    </head>
+    <header class="cabecalho">
+        <a href="#" class="logo">
+            <img src="./../imagem/logoPI.jpg" alt="LogoAbraceUmIdoso">
+        </a>
+        <nav class="nav-menu">
+            <ul>
+                <li><a href="cadastroVoluntario.html">Cadastrar</a></li>
+                <li><a href="/login" class="ga-nav" title="agendamento">Login</a></li>
+            </ul>
+            <ul>
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="/agendamento" class="ga-nav" title="agendamento">Agendamento</a></li>
+            <li><a href="/cartas" class="ga-nav" title="cartas">Cartas</a></li>
+            <li><a href="perfilVoluntario.php" class="ga-nav" title="contato">Meu Perfil</a></li>
+            <li><a href="contatos.html" class="ga-nav" title="contato">Fale Conosco</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    <body>
+
+   <main>
+        <div class="perfil-container">
+            <div class="foto"></div>
+
+            <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
+
+            
+            <div class="bio-box">
+                <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br></div>
+                <p><?= htmlspecialchars($dados['sobre']) ?></p>
+            </div>
+
+            <h3>Informações pessoais:</h3>
+
+            <?php
+            // Função para mostrar campo, evita erros se dados faltarem
+            function mostraCampo($label, $valor, $linkEditar) {
+                $valor = htmlspecialchars($valor ?? '');
+                echo "<div class='info-box'>
+                        <span class='label'>$label</span>
+                        <span class='valor'>$valor</span>
+                        <a href='$linkEditar'>
+                            <img src='../imagem/lapis.jpg' class='lapis' alt='Editar $label'>
+                        </a>
+                      </div>";
+            }?>
+                <div class="input-grupo"><label for="email">E-mail:</label>
+                <input type="email" name="email" id="email" value="<?= $dados['email'] ?>"></div>
+                <div class="input-grupo"><label for="celular">Celular:</label><input type="tel" name="celular" id="celular" maxlength="12" value="<?=$dados['celular']?>"></div>
+                <div class="input-grupo"><label for="telefone">Telefone:</label><input type="tel" name="telefone" id="telefone" maxlength="12" value="<?=$dados['telefone']?>"></div>
+
+                <div class="input-linha">
+                    <div class="input-grupo input-grande"><label for="cep">CEP:</label><input type="text" name="cep" id="cep" value="<?=$dados['cep']?>"></div>
+                    <div class="input-grupo input-pequeno"><label for="cidade">Cidade:</label><input type="text" name="cidade" id="cidade" value="<?=$dados['cidade']?>"></div>
+                    <div class="input-grupo input-pequeno"><label for="bairro">Bairro:</label><input type="text" name="bairro" id="bairro" value="<?=$dados['bairro']?>"></div>
+                    <div class="input-grupo input-pequeno">
+                    <label for="estado">Estado:</label>
+                        <select name="estado" id="estado" value="<?=$dados['estado']?>">
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MT">MT</option>
+                            <option value="MS">MS</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                        </select></div>
+                </div>
+
+                <div class="input-linha">
+                    <div class="input-grupo input-grande"><label for="rua">Rua:</label><input type="text" name="rua" id="rua" value="<?=$dados['rua']?>"></div>
+                    <div class="input-grupo input-mini"><label for="numero">Número:</label><input type="text" name="numero" id="numero" value="<?=$dados['numero']?>"></div>
+                    <div class="input-grupo input-grande"><label for="complemento">Complemento:</label><input type="text" name="complemento" id="complemento" value="<?=$dados['complemento']?>"></div>
+                </div>
+                <div class="input-grupo"><label for="senha">Senha:</label><input type="password" name="senha" id="senha" value="<?=$dados['senha']?>"></div>
+
+                <button type="submit" class="btn btn-marrom">Salvar</button><br>
+            </form>
+            <div class="botoes">
+                <li><a class="btn-azul" href="perfilVoluntario.php">Cancelar</a></li>
+                
+                
+            </div>
+        </div>
+    </main>
+</div>
+    <footer class="rodape"><p>© 2026 RastroCerto. Todos os direitos reservados</p></footer>
 </body>
 </html>

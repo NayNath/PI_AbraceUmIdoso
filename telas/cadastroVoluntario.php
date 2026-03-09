@@ -23,8 +23,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
         $rua = trim(ucwords($_POST['rua']));
-        //$nomeLogradouro = null;//trim($_POST['nomeLogradouro']);
-        //$tipoLogradouro = null;//trim($_POST['tipoLogradouro']);
+        $nomeLogradouro = null;//trim($_POST['nomeLogradouro']);
+        $tipoLogradouro = null;//trim($_POST['tipoLogradouro']);
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
@@ -47,7 +47,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->obrigatorio('senha',$senha);
         $validar->obrigatorio('confirmarSenha',$confirmarSenha);
 
-
         // ---------------------------------------- Checar tamanho maximo ----------------------------------------
         $validar->tamanhoMax('nomePessoa',$nomePessoa, 50);
         $validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
@@ -60,7 +59,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->tamanhoMax('senha',$senha, 45);
         $validar->tamanhoMax('confirmarSenha',$confirmarSenha, 45);
 
-
         // ---------------------------------------- Checar se o campo é numérico ----------------------------------------
         $validar->numero('cpf',$cpf);
         $validar->numero('celular',$celular);
@@ -68,10 +66,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->numero('cep',$cep);
         $validar->numero('numero',$numero);
 
-
         // ---------------------------------------- Checar E-mail (email) ----------------------------------------
         $validar->email('email',$email);
-
 
         // ---------------------------------------- Checar se o damanho esta certo (cep,telefone,celular,cpf,estado)----------------------------------------
         $validar->tamanhoExato('cpf',$cpf,11);
@@ -80,31 +76,21 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->tamanhoExato('cep',$cep, 8);
         $validar->tamanhoExato('estado',$estado, 2);
 
-
         // ---------------------------------------- Checar string sem número ----------------------------------------
         $validar->stringSemNumero('nomePessoa',$nomePessoa);
         $validar->stringSemNumero('estado',$estado);
 
-
         // ---------------------------------------- Checar Data de nascimento ----------------------------------------
         $validar->maiorDeIdade('dateNascimento',$dateNascimento);
 
-
         // ---------------------------------------- Checar Senha ----------------------------------------
         $validar->senha($senha, $confirmarSenha);
-
-
-
 
         if($validar->temErros()){
                 $erros = $validar->getErros();
                 header("Location: ./telas/cadastroVoluntario.html");
         }else{
-
-
                 try{
-
-
                 /*======================================================PESSOAS======================================================*/
                         $pdo->beginTransaction();
 
@@ -142,8 +128,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,complemento)
-                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:complemento)");
+                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,nomeLogradouro,tipoLogradouro,complemento)
+                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:nomeLogradouro,:tipoLogradouro,:complemento)");
 
 
                         $stmt->execute([':cep'=>$cep,
@@ -152,8 +138,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                                                 ':bairro'=>$bairro,
                                                 ':numero'=>$numero,
                                                 ':rua'=>$rua,
-                                                //':nomeLogradouro'=>$nomeLogradouro,
-                                                //':tipoLogradouro'=>$tipoLogradouro,
+                                                ':nomeLogradouro'=>$nomeLogradouro,
+                                                ':tipoLogradouro'=>$tipoLogradouro,
                                                 ':complemento'=>$complemento]);
                                        
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
@@ -173,7 +159,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
 
                         $pdo->commit();
-                        $mensagem="<p class='sucesso'>Cadastro efetivado</p>";
+                        header("Location: perfilVoluntario.php");
                 } catch (Exception $e) {
                         $pdo->rollBack();
                         echo $e->getMessage();

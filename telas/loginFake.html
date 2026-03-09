@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<style>
+    body{
+        font-family: Arial;
+        background:#f4f4f4;
+    }
+    .login{
+        width:300px;
+        margin:120px auto;
+        padding:20px;
+        background:white;
+        border-radius:8px;
+        box-shadow:0 0 10px rgba(0,0,0,0.2);
+    }
+    input{
+        width:100%;
+        padding:10px;
+        margin:8px 0;
+    }
+    button{
+        width:100%;
+        padding:10px;
+        background:#2c7be5;
+        color:white;
+        border:none;
+    }
+</style>
+</head>
+    <body>
+        <div class="login">
+            <h2>Login</h2>
+            <form action="loginFake.php" method="POST">
+                <input type="email" name="email" placeholder="Digite seu email" required>
+                <input type="password" name="senha" placeholder="Digite sua senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+    </body>
+</html>
