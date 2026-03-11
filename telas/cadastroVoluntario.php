@@ -1,18 +1,15 @@
 <?php
 require_once "../conexao/conexao.php";
-require_once "../classes/Pessoas.php";
-require_once "../classes/Contatos.php";
-require_once "../classes/Enderecos.php";
+//require_once "../classes/Pessoas.php";
+//require_once "../classes/Contatos.php";
+//require_once "../classes/Enderecos.php";
 require_once "../classes/ValidarEntradas.php";
-
-
 $validar = new ValidarEntradas();
- 
  
 if($_SERVER['REQUEST_METHOD']==='POST'){
         $nomePessoa = trim(ucwords($_POST['nomePessoa']));
         $cpf = trim($_POST['cpf']);
-        $dateNascimento = trim($_POST['dateNascimento']);
+        $dataNascimento = trim($_POST['dataNascimento']);
         $fotoPerfil = trim($_POST['fotoPerfil']);
         $sobre = trim($_POST['sobre']);
         $celular = trim($_POST['celular']);;
@@ -23,8 +20,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
         $rua = trim(ucwords($_POST['rua']));
-        $nomeLogradouro = null;//trim($_POST['nomeLogradouro']);
-        $tipoLogradouro = null;//trim($_POST['tipoLogradouro']);
+        $nomeLogradouro = "rua";//trim($_POST['nomeLogradouro']);
+        $tipoLogradouro = "null";//trim($_POST['tipoLogradouro']);
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
@@ -33,7 +30,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         $validar->obrigatorio('nomePessoa',$nomePessoa);
         $validar->obrigatorio('cpf',$cpf);
-        $validar->obrigatorio('dateNascimento',$dateNascimento);
+        $validar->obrigatorio('dataNascimento',$dataNascimento);
         $validar->obrigatorio('fotoPerfil',$fotoPerfil);
         $validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
@@ -81,85 +78,70 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->stringSemNumero('estado',$estado);
 
         // ---------------------------------------- Checar Data de nascimento ----------------------------------------
-        $validar->maiorDeIdade('dateNascimento',$dateNascimento);
+        $validar->maiorDeIdade('dataNascimento',$dataNascimento);
 
         // ---------------------------------------- Checar Senha ----------------------------------------
         $validar->senha($senha, $confirmarSenha);
 
         if($validar->temErros()){
-                $erros = $validar->getErros();
-                header("Location: ./telas/cadastroVoluntario.html");
+                        $erros = $validar->getErros();
+                        header("Location: ./cadastroVoluntario.html");
         }else{
                 try{
                 /*======================================================PESSOAS======================================================*/
                         $pdo->beginTransaction();
 
+                        $stmt = $pdo->prepare("INSERT INTO pessoa(nomePessoa, cpf, dataNascimento, fotoPerfil, sobre)
+                        VALUES (:nomePessoa, :cpf, :dataNascimento, :fotoPerfil, :sobre)");
 
-                        $stmt = $pdo->prepare("INSERT INTO pessoas (nomePessoa, cpf, dateNascimento, fotoPerfil, sobre)
-                        VALUES (:nomePessoa, :cpf, :dateNascimento, :fotoPerfil, :sobre)");
-
-
-                        $stmt->execute([':nomePessoa' => $nomePessoa,
+                        $stmt->execute([':nomePessoa'=>$nomePessoa,
                                                 ':cpf'=>$cpf,
-                                                ':dateNascimento'=> $dateNascimento,
-                                                ':fotoPerfil'=> $fotoPerfil,
-                                                ':sobre'=> $sobre]);
+                                                ':dataNascimento'=>$dataNascimento,
+                                                ':fotoPerfil'=>$fotoPerfil,
+                                                ':sobre'=>$sobre]);
                         if(!$stmt->rowCount()){
                         throw new Exception("Erro ao inserir em pessoas");
                         }
 
-
-                       
                         $idPessoa = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
-
                 /*======================================================CONTATOS======================================================*/                            
-                        $stmt = $pdo->prepare("INSERT INTO contatos(email,celular,telefone)
+                        $stmt = $pdo->prepare("INSERT INTO contato(email,celular,telefone)
                                 VALUES (:email,:celular,:telefone)");
-
 
                         $stmt->execute([':email'=>$email,
                                                 ':celular'=>$celular,
                                                 ':telefone'=>$telefone]);
-
-
                        
-                        $idContatos = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
-
+                        $idContato = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,nomeLogradouro,tipoLogradouro,complemento)
-                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:nomeLogradouro,:tipoLogradouro,:complemento)");
-
+                        $stmt = $pdo->prepare("INSERT INTO endereco(cep,estado,cidade,bairro,numero,nomeLogradouro,tipoLogradouro,complemento)
+                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:nomeLogradouro,:tipoLogradouro,:complemento)");
 
                         $stmt->execute([':cep'=>$cep,
                                                 ':estado'=>$estado,
                                                 ':cidade'=>$cidade,
                                                 ':bairro'=>$bairro,
                                                 ':numero'=>$numero,
-                                                ':rua'=>$rua,
                                                 ':nomeLogradouro'=>$nomeLogradouro,
                                                 ':tipoLogradouro'=>$tipoLogradouro,
                                                 ':complemento'=>$complemento]);
                                        
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
-
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO voluntarios(senha,idContatos,idEndereco,idPessoa)
+                        $stmt = $pdo->prepare("INSERT INTO voluntario(senha,idContato,idEndereco,idPessoa)
                         VALUES (:senha,:idContatos,:idEndereco,:idPessoa)");
 
-
                         $stmt->execute([':senha'=>password_hash($senha, PASSWORD_DEFAULT),
-                                                ':idContatos'=>$idContatos,
+                                                ':idContato'=>$idContato,
                                                 ':idEndereco'=>$idEndereco,
                                                 ':idPessoa'=>$idPessoa]);
                        
                         $idVoluntario = $pdo->lastInsertId();
-
-
                         $pdo->commit();
-                        header("Location: perfilVoluntario.php");
+
                 } catch (Exception $e) {
                         $pdo->rollBack();
                         echo $e->getMessage();

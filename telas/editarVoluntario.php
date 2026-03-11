@@ -92,7 +92,7 @@
 
                     $stmt->execute([':nomePessoa' => $nomePessoa,
                                                 ':cpf'=>$cpf,
-                                                ':dateNascimento'=> $dateNascimento,
+                                                ':dataNascimento'=> $dataNascimento,
                                                 ':fotoPerfil'=> $fotoPerfil,
                                                 ':sobre'=> $sobre]);
 

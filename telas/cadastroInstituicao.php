@@ -1,7 +1,7 @@
 <?php
 require_once "../conexao/conexao.php";
-require_once "../classes/Contatos.php";
-require_once "../classes/Enderecos.php";
+//require_once "../classes/Contatos.php";
+//require_once "../classes/Enderecos.php";
 require_once "../classes/ValidarEntradas.php";
 
 $validar = new ValidarEntradas(); 
@@ -17,8 +17,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $cidade = trim(ucwords($_POST['cidade']));
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
-        $rua = trim(ucwords($_POST['rua']));
-        $nomeLogradouro = "null";
+        $nomeLogradouro = trim(ucwords($_POST['rua']));;
         $tipoLogradouro = "null";
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
@@ -82,25 +81,24 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
                 /*======================================================CONTATOS======================================================*/                            
                         $pdo->beginTransaction();
-                        $stmt = $pdo->prepare("INSERT INTO contatos(email,celular,telefone)
+                        $stmt = $pdo->prepare("INSERT INTO contato(email,celular,telefone)
                                 VALUES (:email,:celular,:telefone)");
 
                         $stmt->execute([':email'=>$email,
                                                 ':celular'=>$celular,
                                                 ':telefone'=>$telefone]);
 
-                        $idContatos = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
+                        $idContato = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO enderecos(cep,estado,cidade,bairro,numero,rua,nomeLogradouro,tipoLogradouro,complemento)
-                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:rua,:nomeLogradouro,:tipoLogradouro,:complemento)");
+                        $stmt = $pdo->prepare("INSERT INTO endereco(cep,estado,cidade,bairro,numero,nomeLogradouro,tipoLogradouro,complemento)
+                        VALUES (:cep,:estado,:cidade,:bairro,:numero,:nomeLogradouro,:tipoLogradouro,:complemento)");
 
                         $stmt->execute([':cep'=>$cep,
                                                 ':estado'=>$estado,
                                                 ':cidade'=>$cidade,
                                                 ':bairro'=>$bairro,
                                                 ':numero'=>$numero,
-                                                ':rua'=>$rua,
                                                 ':nomeLogradouro'=>$nomeLogradouro,
                                                 ':tipoLogradouro'=>$tipoLogradouro,
                                                 ':complemento'=>$complemento]);
@@ -108,20 +106,19 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================INSTITUICAO======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO instituicao(fotoInstituicao,nomeInstituicao,cnpj,senha,idContatos,idEndereco)
+                        $stmt = $pdo->prepare("INSERT INTO instituicao(fotoInstituicao,nomeInstituicao,cnpj,senha,idContato,idEndereco)
                         VALUES (:fotoInstituicao,:nomeInstituicao,:cnpj,:senha,:idContatos,:idEndereco)");
 
                         $stmt->execute([':nomeInstituicao'=>$nomeInstituicao,
                                                 ':fotoInstituicao'=>$fotoInstituicao,
                                                 ':cnpj'=>$cnpj,
                                                 ':senha'=>password_hash($senha, PASSWORD_DEFAULT),
-                                                ':idContatos'=>$idContatos,
+                                                ':idContato'=>$idContato,
                                                 ':idEndereco'=>$idEndereco]);
                        
                         $idInstituicao = $pdo->lastInsertId();
-
                         $pdo->commit();
-                        $mensagem="<p class='sucesso'>Cadastro efetivado</p>";
+                        
                 } catch (Exception $e) {
                         $pdo->rollBack();
                         echo $e->getMessage();

@@ -2,15 +2,14 @@
 require_once "../conexao/conexao.php";
 class Pessoas{
     public string $nomePessoa, $cpf, $fotoPerfil, $sobre;
-    public $dateNascimento;
+    public $dataNascimento;
 
-
-    public function __construct($nomePessoa, $cpf, $fotoPerfil, $sobre, $dateNascimento){
+    public function __construct($nomePessoa, $cpf, $fotoPerfil, $sobre, $dataNascimento){
         $this->nomePessoa = $nomePessoa;
         $this->cpf = $cpf;
         $this->fotoPerfil = $fotoPerfil;
         $this->sobre = $sobre;
-        $this->dateNascimento = $dateNascimento;
+        $this->dataNascimento = $dataNascimento;
     }
     public function __get($valor){
         return $this->$valor;

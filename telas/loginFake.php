@@ -1,10 +1,9 @@
 <?php
 session_start();
 require_once "../conexao/conexao.php";
-require_once "../classes/Contatos.php";
 
-$email = $_POST['email'];
-$senha = $_POST['senha'];
+$email = trim($_POST['email']);
+$senha = trim($_POST['senha']);
 
 $sql = "SELECT voluntarios.senha, voluntarios.idVoluntario, contatos.email
         FROM voluntarios
@@ -17,7 +16,6 @@ $stmt->bindParam(':email', $email);
 $stmt->execute();
 
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
 
 if($usuario){
 
@@ -36,5 +34,6 @@ if($usuario){
 
 } else {
     echo "Email não encontrado";
+    var_dump($usuario);
 }
 ?>

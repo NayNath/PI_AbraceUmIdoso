@@ -71,24 +71,43 @@
         </div>
         <div class="coluna-direita">
             <div class="input-grupo"><label for="nomePessoa">Nome:</label><input type="text" name="nomePessoa" id="nomePessoa" ></div>
-
+                <?php if(isset($erros['nomePessoa'])): 
+                    echo $erros['nomePessoa'] 
+                    endif; ?>
+            
             <div class="input-grupo"><label for="email">E-mail:</label><input type="email" name="email" id="email" ></div>
-
-            <div class="input-grupo"><label for="dateNascimento">Data Nascimento:</label><input type="date" name="dateNascimento" id="dateNascimento" ></div>
-
+                    <?php if(isset($erros['email'])): 
+                    echo $erros['email'] 
+                    endif; ?>
+            <div class="input-grupo"><label for="dataNascimento">Data Nascimento:</label><input type="date" name="dataNascimento" id="dataNascimento" ></div>
+                    <?php if(isset($erros['dataNascimento'])): 
+                    echo $erros['dataNascimento'] 
+                    endif; ?>
             <div class="input-grupo"><label for="cpf">cpf:</label><input type="text" name="cpf" id="cpf" ></div>
-
+                    <?php if(isset($erros['cpf'])): 
+                    echo $erros['cpf'] 
+                    endif; ?>
             <div class="input-grupo"><label for="celular">Celular:</label><input type="tel" name="celular" id="celular" maxlength="12" ></div>
-
+                    <?php if(isset($erros['celular'])): 
+                    echo $erros['celular']; 
+                    endif; ?>
             <div class="input-grupo"><label for="telefone">Telefone:</label><input type="tel" name="telefone" id="telefone" maxlength="12" ></div>
-
+                    <?php if(isset($erros['telefone'])): 
+                    echo $erros['telefone'] 
+                    endif; ?>
             <div class="input-linha">
                 <div class="input-grupo input-grande"><label for="cep">CEP:</label><input type="text" name="cep" id="cep" ></div>
-
+                    <?php if(isset($erros['cep'])): 
+                    echo $erros['cep'] 
+                    endif; ?>
                 <div class="input-grupo input-pequeno"><label for="cidade">Cidade:</label><input type="text" name="cidade" id="cidade" ></div>
-
+                    <?php if(isset($erros['cidade'])): 
+                    echo $erros['cidade'] 
+                    endif; ?>
                 <div class="input-grupo input-pequeno"><label for="bairro">Bairro:</label><input type="text" name="bairro" id="bairro" ></div>
-
+                    <?php if(isset($erros['bairro'])): 
+                    echo $erros['bairro'] 
+                    endif; ?>
                 <div class="input-grupo input-pequeno">
                 <label for="estado">Estado:</label>
                     <select name="estado" id="estado" >
@@ -119,20 +138,28 @@
                         <option value="SE">SE</option>
                         <option value="TO">TO</option>
                     </select></div>
-
+                    <?php if(isset($erros['estado'])): 
+                    echo $erros['estado'] 
+                    endif; ?>
             </div>
  
             <div class="input-linha">
                 <div class="input-grupo input-grande"><label for="rua">Rua:</label><input type="text" name="rua" id="rua" ></div>
-
+                    <?php if(isset($erros['rua'])): 
+                    echo $erros['rua'] 
+                    endif; ?>
                 <div class="input-grupo input-mini"><label for="numero">Número:</label><input type="text" name="numero" id="numero" ></div>
- 
+                     <?php if(isset($erros['numero'])): 
+                    echo $erros['numero'] 
+                    endif; ?>
                 <div class="input-grupo input-grande"><label for="complemento">Complemento:</label><input type="text" name="complemento" id="complemento" ></div>
 
             </div>
            
             <div class="input-grupo"><label for="senha">Senha:</label><input type="password" name="senha" id="senha" ></div>
-
+                    <?php if(isset($erros['senha'])): 
+                    echo $erros['senha'] 
+                    endif; ?>
             <div class="input-grupo"><label for="confirmarSenha">Confirmar senha:</label><input type="password" name="confirmarSenha" id="confirmarSenha" ></div>
 
         </div>

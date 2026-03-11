@@ -3,7 +3,6 @@ require_once "../conexao/conexao.php";
 class Contatos {
     private string $email, $celular, $telefone;
 
-
     public function __construct($email, $celular, $telefone) {
         $this->email = $email;
         $this->celular = $celular;

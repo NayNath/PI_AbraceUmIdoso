@@ -53,7 +53,7 @@ class ValidarEntradas{
             $this->adicionarErro($campo, "O campo $campo não pode conter números.");
         }
     }
-    // ---------------------------------------- Checar Data de nascimento (dateNascimento) ----------------------------------------
+    // ---------------------------------------- Checar Data de nascimento (dataNascimento) ----------------------------------------
     public function maiorDeIdade($campo, $dataNascimento){
  
         $nascimento = new DateTime($dataNascimento);
