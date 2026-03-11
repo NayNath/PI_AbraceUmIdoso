@@ -19,13 +19,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $cidade = trim(ucwords($_POST['cidade']));
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
-        $rua = trim(ucwords($_POST['rua']));
-        $nomeLogradouro = "rua";//trim($_POST['nomeLogradouro']);
+        $nomeLogradouro = trim(ucwords($_POST['nomeLogradouro']));
         $tipoLogradouro = "null";//trim($_POST['tipoLogradouro']);
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
         $confirmarSenha = trim($_POST['confirmarSenha']);
+        $resetToken = null;
+        $tokenExpira = null;
    
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         $validar->obrigatorio('nomePessoa',$nomePessoa);
@@ -39,7 +40,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->obrigatorio('cidade',$cidade);
         $validar->obrigatorio('bairro',$bairro);
         $validar->obrigatorio('estado',$estado);
-        $validar->obrigatorio('rua',$rua);
+        $validar->obrigatorio('nomeLogradouro',$nomeLogradouro);
         $validar->obrigatorio('numero',$numero);
         $validar->obrigatorio('senha',$senha);
         $validar->obrigatorio('confirmarSenha',$confirmarSenha);
@@ -51,7 +52,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
         $validar->tamanhoMax('bairro',$bairro, 50);
-        $validar->tamanhoMax('rua',$rua, 50);
+        $validar->tamanhoMax('nomeLogradouro',$nomeLogradouro, 50);
         $validar->tamanhoMax('numero',$numero, 6);
         $validar->tamanhoMax('senha',$senha, 45);
         $validar->tamanhoMax('confirmarSenha',$confirmarSenha, 45);
@@ -131,13 +132,15 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("INSERT INTO voluntario(senha,idContato,idEndereco,idPessoa)
-                        VALUES (:senha,:idContatos,:idEndereco,:idPessoa)");
+                        $stmt = $pdo->prepare("INSERT INTO voluntario(senha,idContato,idEndereco,idPessoa,resetToken,tokenExpira)
+                        VALUES (:senha,:idContatos,:idEndereco,:idPessoa,:resetToken,:tokenExpira)");
 
                         $stmt->execute([':senha'=>password_hash($senha, PASSWORD_DEFAULT),
                                                 ':idContato'=>$idContato,
                                                 ':idEndereco'=>$idEndereco,
-                                                ':idPessoa'=>$idPessoa]);
+                                                ':idPessoa'=>$idPessoa,
+                                                ':resetToken'=>$resetToken,
+                                                ':tokenExpira'=>$tokenExpira]);
                        
                         $idVoluntario = $pdo->lastInsertId();
                         $pdo->commit();

@@ -5,7 +5,7 @@
     $idVoluntario = $_SESSION['idVoluntario'];
 
     $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
-        e.cep, e.cidade, e.estado, e.bairro, e.rua, e.numero, e.complemento
+        e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
         FROM voluntarios v
         INNER JOIN pessoas p ON v.idPessoa = p.idPessoa
         INNER JOIN contatos c ON v.idContatos = c.idContatos
@@ -101,7 +101,7 @@
             mostraCampo('Cidade:', $dados['cidade'], 'editarVoluntario.php');
             mostraCampo('Estado:', $dados['estado'], 'editarVoluntario.php');
             mostraCampo('Bairro:', $dados['bairro'], 'editarVoluntario.php');
-            mostraCampo('Rua:', $dados['rua'], 'editarVoluntario.php');
+            mostraCampo('Rua:', $dados['nomeLogradouro'], 'editarVoluntario.php');
             mostraCampo('Nº:', $dados['numero'], 'editarVoluntario.php');
             mostraCampo('Complemento:', $dados['complemento'], 'editarEndereco.php');
             ?>

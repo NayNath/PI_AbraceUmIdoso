@@ -5,14 +5,14 @@
 
     $idVoluntario = $_SESSION['idVoluntario'];
 
-    $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular, 
-        e.cep, e.cidade, e.estado, e.bairro, e.rua, e.numero, e.complemento
+    $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
+        e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
         FROM voluntarios v
         INNER JOIN pessoas p ON v.idPessoa = p.idPessoa
         INNER JOIN contatos c ON v.idContatos = c.idContatos
         INNER JOIN enderecos e ON v.idEndereco = e.idEndereco
         WHERE v.idVoluntario = :id";
-
+        
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id',$idVoluntario);
     $stmt->execute();
@@ -29,7 +29,7 @@
         $cidade = trim(ucwords($_POST['cidade']));
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
-        $rua = trim(ucwords($_POST['rua']));
+        $nomeLogradouro = trim(ucwords($_POST['$nomeLogradouro']));
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);

@@ -17,7 +17,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $cidade = trim(ucwords($_POST['cidade']));
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
-        $nomeLogradouro = trim(ucwords($_POST['rua']));;
+        $nomeLogradouro = trim(ucwords($_POST['nomeLogradouro']));;
         $tipoLogradouro = "null";
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
@@ -34,7 +34,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->obrigatorio('cidade',$cidade);
         $validar->obrigatorio('bairro',$bairro);
         $validar->obrigatorio('estado',$estado);
-        $validar->obrigatorio('rua',$rua);
+        $validar->obrigatorio('nomeLogradouro',$nomeLogradouro);
         $validar->obrigatorio('numero',$numero);
         $validar->obrigatorio('senha',$senha);
         $validar->obrigatorio('confirmarSenha',$confirmarSenha);
@@ -45,7 +45,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
         $validar->tamanhoMax('bairro',$bairro, 50);
-        $validar->tamanhoMax('rua',$rua, 50);
+        $validar->tamanhoMax('nomeLogradouro',$nomeLogradouro, 50);
         $validar->tamanhoMax('numero',$numero, 6);
         $validar->tamanhoMax('senha',$senha, 45);
         $validar->tamanhoMax('confirmarSenha',$confirmarSenha, 45);
