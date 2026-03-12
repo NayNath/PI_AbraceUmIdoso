@@ -1,5 +1,5 @@
 .banner{
-    background-image: url('./../imagem/imagemBanner.png');
+    background-image: url('./../img/imagemBanner.png');
     background-size: cover;
     background-position: center;
     min-height: 700px; /* Altura ajustada para o novo contexto */

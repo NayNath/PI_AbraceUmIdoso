@@ -1,6 +1,6 @@
 .imgContato { 
     height: 400px;
-    background-image: url('./../imagem/jovemIdosa.png'); 
+    background-image: url('./../img/jovemIdosa.png'); 
     background-size: cover;
     background-position: 50% 25%;
     display: flex;

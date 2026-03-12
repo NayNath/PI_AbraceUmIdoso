@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../conexao/conexao.php";
+require "../conexao/conexao.php";
 
 $email = trim($_POST['email']);
 $senha = trim($_POST['senha']);

@@ -1,9 +1,11 @@
 <?php
-require_once "../conexao/conexao.php";
-//require_once "../class/Pessoas.php";
-//require_once "../class/Contatos.php";
-//require_once "../class/Enderecos.php";
-require_once "../class/ValidarEntradas.php";
+session_start();
+require "../conexao/conexao.php";
+//require "../class/Pessoas.php";
+//require "../class/Contatos.php";
+//require "../class/Enderecos.php";
+require "../class/ValidarEntradas.php";
+
 $validar = new ValidarEntradas();
  
 if($_SERVER['REQUEST_METHOD']==='POST'){

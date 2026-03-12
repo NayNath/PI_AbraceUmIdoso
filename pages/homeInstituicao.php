@@ -1,11 +1,14 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abrace um idoso</title>
-    <link rel="stylesheet" href="./assets/css/estilo.css">
-    <link rel="stylesheet" href="./assets/css/inicio.css">
+    <link rel="stylesheet" href="./../assets/css/estilo.css">
+    <link rel="stylesheet" href="./../assets/css/inicio.css">
 </head>
 <body>
    
@@ -19,16 +22,19 @@
 </head>
 <header class="cabecalho">
     <a href="#" class="logo">
-        <img src="./assets/img/logoPI.jpg" alt="LogoAbraceUmIdoso">
+        <img src="./../assets/img/logoPI.jpg" alt="LogoAbraceUmIdoso">
     </a>
     <nav class="nav-menu">
         <ul>
-            <li><a href="./pages/cadastroVoluntario.html">Cadastrar</a></li>
-            <li><a href="./pages/loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
+            <li><a href="cadastroVoluntario.html">Cadastrar</a></li>
+            <li><a href="loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
         </ul>
         <ul>
-            <li><a href="index.php">Início</a></li>
-            <li><a href="./pages/contatos.html" class="ga-nav" title="contato">Fale Conosco</a></li>
+            <li><a href="home.php">Início</a></li>
+            <li><a href="agendamento" class="ga-nav" title="agendamento">Agendamento</a></li>
+            <li><a href="cartas" class="ga-nav" title="cartas">Cartas</a></li>
+            <li><a href="contatos.html" class="ga-nav" title="contato">Fale Conosco</a></li>
+            <li><a href="perfilVoluntario.php" class="ga-nav" title="contato">Meu Perfil</a></li>
         </ul>
     </nav>
 </header>
@@ -42,8 +48,8 @@
     </div>
 
     <div>
-        <a href="./pages/cadastroVoluntario.html"><button class="btn btn-marrom">Quero visitar</button></a>
-        <a href="./pages/cadastroInstituicao.html"><button  class="btn btn-amarelo">Quero Receber Visitas</button></a>
+        <a href="cadastroVoluntario.html"><button class="btn btn-marrom">Quero visitar</button></a>
+        <a href="cadastroInstituicao.html"><button  class="btn btn-amarelo">Quero Receber Visitas</button></a>
     </div>
    
 </div>
@@ -54,19 +60,19 @@
     <div class="missao-content">
         <div class="missao-item">
             <div class="icone-circulo">
-                <img src="./assets/img/maos.png" alt="Aperto de mão" /> 
+                <img src="./../assets/img/maos.png" alt="Aperto de mão" /> 
         </div>
     </div>
         
         <div class="missao-item">
             <div class="icone-circulo">
-                <img src="./assets/img/idosos.png" alt="idosos" /> 
+                <img src="./../assets/img/idosos.png" alt="idosos" /> 
             </div>
         </div>
         
         <div class="missao-item">
             <div class="icone-circulo">
-                <img src="./assets/img/pessoas.png" alt="Duas pessoas lado a lado" /> 
+                <img src="./../assets/img/pessoas.png" alt="Duas pessoas lado a lado" /> 
             </div>
         </div>
 
