@@ -188,7 +188,7 @@
             <li><a href="loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
         </ul>
         <ul>
-            <li><a href="home.php">Início</a></li>
+            <li><a href="homeVoluntario.php">Início</a></li>
             <li><a href="agendamento" class="ga-nav" title="agendamento">Agendamento</a></li>
             <li><a href="cartas" class="ga-nav" title="cartas">Cartas</a></li>
             <li><a href="contatos.html" class="ga-nav" title="contato">Fale Conosco</a></li>
