@@ -7,10 +7,10 @@
 
     $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
         e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
-        FROM voluntarios v
-        INNER JOIN pessoas p ON v.idPessoa = p.idPessoa
-        INNER JOIN contatos c ON v.idContatos = c.idContatos
-        INNER JOIN enderecos e ON v.idEndereco = e.idEndereco
+        FROM voluntario v
+        INNER JOIN pessoa p ON v.idPessoa = p.idPessoa
+        INNER JOIN contato c ON v.idContato = c.idContato
+        INNER JOIN endereco e ON v.idEndereco = e.idEndereco
         WHERE v.idVoluntario = :id";
         
     $stmt = $pdo->prepare($sql);
@@ -86,7 +86,7 @@
 
                 /*======================================================PESSOAS======================================================*/      
                     $pdo->beginTransaction();
-                    $stmt = $pdo->prepare("UPDADTE pessoas
+                    $stmt = $pdo->prepare("UPDADTE pessoa
                                                     SET sobre = :sobre
                                                     WHERE idVoluntario = :id");
 
@@ -99,7 +99,7 @@
                     $idPessoa = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================CONTATOS======================================================*/                            
-                        $stmt = $pdo->prepare("UPDADTE contatos
+                        $stmt = $pdo->prepare("UPDADTE contato
                                                         SET email = :email,
                                                         celular = :celular
                                                         telefone = :telefone
@@ -113,7 +113,7 @@
 
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("UPDADTE enderecos
+                        $stmt = $pdo->prepare("UPDADTE endereco
                                                         SET cep = :cep,
                                                         estado = :estado
                                                         cidade = :cidade
@@ -136,12 +136,12 @@
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("UPDADTE contatos
+                        $stmt = $pdo->prepare("UPDADTE contato
                                                         SET senha = :senha,
                                                         WHERE idVoluntario = :id");
 
                         $stmt->execute([':senha'=>password_hash($senha, PASSWORD_DEFAULT),
-                                                ':idContatos'=>$idContatos,
+                                                ':idContato'=>$idContato,
                                                 ':idEndereco'=>$idEndereco,
                                                 ':idPessoa'=>$idPessoa]);
                        
@@ -176,7 +176,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="caminho/para/seu/style.css"> 
+    <link rel="stylesheet" href="./../assets/css/perfil.css"> 
 </head>
 <header class="cabecalho">
     <a href="#" class="logo">
