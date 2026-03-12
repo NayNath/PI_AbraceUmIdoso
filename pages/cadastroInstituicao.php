@@ -1,8 +1,9 @@
 <?php
 require_once "../conexao/conexao.php";
-//require_once "../classes/Contatos.php";
-//require_once "../classes/Enderecos.php";
-require_once "../classes/ValidarEntradas.php";
+//require_once "../class/Contatos.php";
+//require_once "../class/Enderecos.php";
+require_once "../class/ValidarEntradas.php";
+
 
 $validar = new ValidarEntradas(); 
  

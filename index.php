@@ -24,8 +24,8 @@
     </a>
     <nav class="nav-menu">
         <ul>
-            <li><a href="./telas/cadastroVoluntario.html">Cadastrar</a></li>
-            <li><a href="./telas/loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
+            <li><a href="./pages/cadastroVoluntario.html">Cadastrar</a></li>
+            <li><a href="./pages/loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
         </ul>
         <ul>
             <li><a href="index.html">Início</a></li>
@@ -45,8 +45,8 @@
     </div>
 
     <div>
-        <a href="./telas/cadastroVoluntario.html"><button class="btn btn-marrom">Quero visitar</button></a>
-        <a href="./telas/cadastroInstituicao.html"><button  class="btn btn-amarelo">Quero Receber Visitas</button></a>
+        <a href="./pages/cadastroVoluntario.html"><button class="btn btn-marrom">Quero visitar</button></a>
+        <a href="./pages/cadastroInstituicao.html"><button  class="btn btn-amarelo">Quero Receber Visitas</button></a>
     </div>
    
 </div>
