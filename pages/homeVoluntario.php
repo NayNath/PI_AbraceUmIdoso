@@ -34,7 +34,7 @@ session_start();
             <li><a href="agendamento" class="ga-nav" title="agendamento">Agendamento</a></li>
             <li><a href="cartas" class="ga-nav" title="cartas">Cartas</a></li>
             <li><a href="contatos.html" class="ga-nav" title="contato">Fale Conosco</a></li>
-            <li><a href="MUDAR" class="ga-nav" title="contato">Instituição</a></li>
+            <li><a href="perfilVoluntario.php" class="ga-nav" title="contato">Meu Perfil</a></li>
         </ul>
     </nav>
 </header>
