@@ -5,11 +5,11 @@ require "../conexao/conexao.php";
 $email = trim($_POST['email']);
 $senha = trim($_POST['senha']);
 
-$sql = "SELECT voluntarios.senha, voluntarios.idVoluntario, contatos.email
-        FROM voluntarios
-        INNER JOIN contatos 
-        ON voluntarios.idContatos = contatos.idContatos
-        WHERE contatos.email = :email";
+$sql = "SELECT voluntario.senha, voluntario.idVoluntario, contato.email
+        FROM voluntario
+        INNER JOIN contato 
+        ON voluntario.idContato = contato.idContato
+        WHERE contato.email = :email";
 
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':email', $email);

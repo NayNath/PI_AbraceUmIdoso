@@ -1,16 +1,16 @@
 <?php
     session_start();
-    require "./restricao.php";
+    //require "./restricao.php";
     require "../conexao/conexao.php";
 
     $idVoluntario = $_SESSION['idVoluntario'];
 
     $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
         e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
-        FROM voluntarios v
-        INNER JOIN pessoas p ON v.idPessoa = p.idPessoa
-        INNER JOIN contatos c ON v.idContatos = c.idContatos
-        INNER JOIN enderecos e ON v.idEndereco = e.idEndereco
+        FROM voluntario v
+        INNER JOIN pessoa p ON v.idPessoa = p.idPessoa
+        INNER JOIN contato c ON v.idContato = c.idContato
+        INNER JOIN endereco e ON v.idEndereco = e.idEndereco
         WHERE v.idVoluntario = :id";
 
     $stmt = $pdo->prepare($sql);
@@ -89,7 +89,7 @@
                         <span class='label'>$label</span>
                         <span class='valor'>$valor</span>
                         <a href='$linkEditar'>
-                            <img src='../imagem/lapis.jpg' class='lapis' alt='Editar $label'>
+                            <img src='./../assets/img/lapis.jpg' class='lapis' alt='Editar $label'>
                         </a>
                       </div>";
             }
@@ -110,7 +110,7 @@
                 <span class="label">Senha:</span>
                 <span class="valor">********</span>
                 <a href="editarSenha.php">
-                    <img src="../imagem/lapis.jpg" class="lapis" alt="Editar Senha" />
+                    <img src="./../assets/img/lapis.jpg" class="lapis" alt="Editar Senha" />
                 </a>
             </div>
         </div>
