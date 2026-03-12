@@ -108,7 +108,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
                 /*======================================================INSTITUICAO======================================================*/        
                         $stmt = $pdo->prepare("INSERT INTO instituicao(fotoInstituicao,nomeInstituicao,cnpj,senha,idContato,idEndereco)
-                        VALUES (:fotoInstituicao,:nomeInstituicao,:cnpj,:senha,:idContatos,:idEndereco)");
+                        VALUES (:fotoInstituicao,:nomeInstituicao,:cnpj,:senha,:idContato,:idEndereco)");
 
                         $stmt->execute([':nomeInstituicao'=>$nomeInstituicao,
                                                 ':fotoInstituicao'=>$fotoInstituicao,

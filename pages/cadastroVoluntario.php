@@ -88,7 +88,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         if($validar->temErros()){
                         $erros = $validar->getErros();
-                        header("Location: ./cadastroVoluntario.html");
+                        header("Location: cadastroVoluntario.html");
         }else{
                 try{
                 /*======================================================PESSOAS======================================================*/
@@ -135,7 +135,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
                 /*======================================================ENDERECOS======================================================*/        
                         $stmt = $pdo->prepare("INSERT INTO voluntario(senha,idContato,idEndereco,idPessoa,resetToken,tokenExpira)
-                        VALUES (:senha,:idContatos,:idEndereco,:idPessoa,:resetToken,:tokenExpira)");
+                        VALUES (:senha,:idContato,:idEndereco,:idPessoa,:resetToken,:tokenExpira)");
 
                         $stmt->execute([':senha'=>password_hash($senha, PASSWORD_DEFAULT),
                                                 ':idContato'=>$idContato,
