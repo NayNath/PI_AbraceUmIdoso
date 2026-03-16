@@ -27,8 +27,7 @@ require "../restricao.php";
     </a>
     <nav class="nav-menu">
         <ul>
-            <li><a href="cadastroVoluntario.html">Cadastrar</a></li>
-            <li><a href="loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
+            <li><a href="./../index.php">Sair</a></li>
         </ul>
         <ul>
             <li><a href="homeVoluntario.php">Início</a></li>

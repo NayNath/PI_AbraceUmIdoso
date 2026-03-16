@@ -86,9 +86,6 @@
                 echo "<div class='info-box'>
                         <span class='label'>$label</span>
                         <span class='valor'>$valor</span>
-                        <a href='$linkEditar'>
-                            <img src='./../assets/img/lapis.jpg' class='lapis' alt='Editar $label'>
-                        </a>
                       </div>";
             }
 
@@ -107,10 +104,9 @@
             <div class="info-box">
                 <span class="label">Senha:</span>
                 <span class="valor">********</span>
-                <a href="editarSenha.php">
-                    <img src="./../assets/img/lapis.jpg" class="lapis" alt="Editar Senha" />
-                </a>
             </div>
+            <br><div class="botoes"><li><a class="btn-azul" href="editarVoluntario.php">Editar</a></li>
+                
         </div>
     </main>
 

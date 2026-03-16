@@ -37,7 +37,7 @@
 
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         //$validar->obrigatorio('fotoPerfil',$fotoPerfil);
-        //$validar->obrigatorio('sobre',$sobre);
+        $validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
         $validar->obrigatorio('email',$email);
         $validar->obrigatorio('cep',$cep);
@@ -87,8 +87,9 @@
 
                 /*======================================================PESSOAS======================================================*/      
                     $pdo->beginTransaction();
-                    $stmt = $pdo->prepare("UPDADTE pessoa
-                                                    SET sobre = :sobre
+                    $stmt = $pdo->prepare("UPDADTE pessoa 
+                                                    SET sobre = :sobre,
+                                                    fotoPerfil = :fotoPerfil
                                                     WHERE idVoluntario = :id");
 
                     $stmt->execute([':nomePessoa' => $nomePessoa,
@@ -220,9 +221,6 @@
                 echo "<div class='info-box'>
                         <span class='label'>$label</span>
                         <span class='valor'>$valor</span>
-                        <a href='$linkEditar'>
-                            <img src='../imagem/lapis.jpg' class='lapis' alt='Editar $label'>
-                        </a>
                       </div>";
             }?>
                 <div class="input-grupo"><label for="email">E-mail:</label>
@@ -277,8 +275,6 @@
             </form>
             <div class="botoes">
                 <li><a class="btn-azul" href="perfilVoluntario.php">Cancelar</a></li>
-                
-                
             </div>
         </div>
     </main>
