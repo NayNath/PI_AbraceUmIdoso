@@ -163,7 +163,7 @@
     width: 70%; /* Ajuste o tamanho da imagem do ícone */
     height: 70%;
     filter: brightness(0.5);
-    color: #f0ebdc; /* Escurece os ícones se forem brancos, ajuste conforme seu ícone */
+    color: #ffffff; /* Escurece os ícones se forem brancos, ajuste conforme seu ícone */
 }
 
 /* Linha marrom abaixo da seção Missão */
