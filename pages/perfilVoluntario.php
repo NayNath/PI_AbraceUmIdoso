@@ -1,6 +1,6 @@
 <?php
     session_start();
-    //require "./restricao.php";
+    require "../restricao.php";
     require "../conexao/conexao.php";
 
     $idVoluntario = $_SESSION['idVoluntario'];
@@ -46,8 +46,7 @@
     </a>
     <nav class="nav-menu">
         <ul>
-            <li><a href="cadastroVoluntario.html">Cadastrar</a></li>
-            <li><a href="loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
+            <li><a href="./../index.php">Sair</a></li>
         </ul>
         <ul>
             <li><a href="homeVoluntario.php">Início</a></li>
@@ -65,10 +64,9 @@
             <div class="foto">
                 <p><?= htmlspecialchars($dados['fotoPerfil']) ?></p>
                 <?php if(isset($erros['confirmarSenha'])): ?>
-                    <img src="./../imagem/?= $dados['fotoPerfil'] ?>">
-                <?php else: ?>
-                        Sem imagem
+                    <?php var_dump($dados['fotoPerfil']); ?>
                 <?php endif; ?>
+                
             </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>

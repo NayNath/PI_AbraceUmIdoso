@@ -1,6 +1,7 @@
 <?php
 //123456*Ty bad@gmail.com
     session_start();
+    require "../restricao.php";
     require_once "../conexao/conexao.php";
 
     $idVoluntario = $_SESSION['idVoluntario'];
@@ -184,8 +185,7 @@
     </a>
     <nav class="nav-menu">
         <ul>
-            <li><a href="cadastroVoluntario.html">Cadastrar</a></li>
-            <li><a href="loginFake.html" class="ga-nav" title="agendamento">Login</a></li>
+            <li><a href="./../index.php">Sair</a></li>
         </ul>
         <ul>
             <li><a href="homeVoluntario.php">Início</a></li>

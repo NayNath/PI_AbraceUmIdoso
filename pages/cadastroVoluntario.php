@@ -29,12 +29,28 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $confirmarSenha = trim($_POST['confirmarSenha']);
         $resetToken = null;
         $tokenExpira = null;
+
+
+        if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === 0){
+                if (!is_dir('./../assets/img/uploads/')){
+                        mkdir('./../assets/img/uploads/', 0777, true); 
+                } 
+                $extensao = pathinfo($_FILES['fotoPerfil']['name'], PATHINFO_EXTENSION);
+                $nomeArquivo = uniqid() . "." . $extensao; 
+                $caminho = "./../assets/img/uploads/" .
+                $nomeArquivo; 
+                if (move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $caminho)){
+                        $imagem = $nomeArquivo; 
+        } else { 
+                echo "<script>alert('Erro ao salvar a imagem!');</script>"; 
+                } 
+        }
    
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         $validar->obrigatorio('nomePessoa',$nomePessoa);
         $validar->obrigatorio('cpf',$cpf);
         $validar->obrigatorio('dataNascimento',$dataNascimento);
-        $validar->obrigatorio('fotoPerfil',$fotoPerfil);
+        //$validar->obrigatorio('fotoPerfil',$fotoPerfil);
         $validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
         $validar->obrigatorio('email',$email);
@@ -49,7 +65,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         // ---------------------------------------- Checar tamanho maximo ----------------------------------------
         $validar->tamanhoMax('nomePessoa',$nomePessoa, 50);
-        $validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
+        //$validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
         $validar->tamanhoMax('sobre',$sobre, 150);
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
@@ -146,6 +162,10 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                        
                         $idVoluntario = $pdo->lastInsertId();
                         $pdo->commit();
+                        session_start();
+                        $idVoluntario = $_SESSION['idVoluntario'];
+                        header("Location: loginFake.html");
+                        session_destroy();
 
                 } catch (Exception $e) {
                         $pdo->rollBack();
