@@ -202,7 +202,10 @@
 
    <main>
         <div class="perfil-container">
-            <div class="foto"></div>
+            <div class="foto">
+                <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>" 
+                    alt="Foto de <?php echo htmlspecialchars($dados['nomePessoa']); ?>"width="150">
+            </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
 
