@@ -10,8 +10,8 @@ $validar = new ValidarEntradas();
 if($_SERVER['REQUEST_METHOD']==='POST'){
         $nomeInstituicao = trim(ucwords($_POST['nomeInstituicao']));
         $cnpj = trim($_POST['cnpj']);
-        $fotoInstituicao = trim($_POST['fotoInstituicao']);
-        $celular = "12345678912";
+        $fotoInstituicao = $_FILES['fotoInstituicao'];
+        $celular = null;
         $email = trim($_POST['email']);
         $telefone = trim($_POST['telefone']);
         $cep = trim($_POST['cep']);
@@ -25,6 +25,25 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $senha = trim($_POST['senha']);
         $confirmarSenha = trim($_POST['confirmarSenha']);
    
+        // ---------------------------------------- Enviar imagem ----------------------------------------
+        $imagem = null;
+
+        if (isset($_FILES['fotoInstituicao']) && $_FILES['fotoInstituicao']['error'] === 0) {
+                $dir = "./../assets/img/uploads/";
+        if (!is_dir($dir)) mkdir($dir, 0755, true);
+                $ext = strtolower(pathinfo($_FILES['fotoInstituicao']['name'], PATHINFO_EXTENSION));
+                $permitidas = ['jpg','jpeg','png','gif'];
+        if (!in_array($ext, $permitidas)) {
+            die("Formato de imagem inválido");
+        }
+        $nomeArquivo = uniqid() . "." . $ext;
+        $caminho = $dir . $nomeArquivo;
+        if (!move_uploaded_file($_FILES['fotoInstituicao']['tmp_name'], $caminho)) {
+            die("Erro ao salvar imagem");
+        }
+        $imagem = $nomeArquivo;
+        }
+        
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         $validar->obrigatorio('nomeInstituicao',$nomeInstituicao);
         $validar->obrigatorio('cnpj',$cnpj);
@@ -62,7 +81,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         // ---------------------------------------- Checar se o damanho esta certo (cep,telefone,celular,cpf,estado)----------------------------------------
         $validar->tamanhoExato('cnpj',$cnpj,14);
-        //$validar->tamanhoExato('celular',$celular,11);
         $validar->tamanhoExato('telefone',$telefone, 11);
         $validar->tamanhoExato('cep',$cep, 8);
         $validar->tamanhoExato('estado',$estado, 2);
@@ -76,10 +94,9 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         if($validar->temErros()){
                 $erros = $validar->getErros();
-                header("Location: ./cadastroInstituicao.html");
+                header("Location: cadastroInstituicao.html");
         }else{
                 try{       
-
                 /*======================================================CONTATOS======================================================*/                            
                         $pdo->beginTransaction();
                         $stmt = $pdo->prepare("INSERT INTO contato(email,celular,telefone)
@@ -111,7 +128,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         VALUES (:fotoInstituicao,:nomeInstituicao,:cnpj,:senha,:idContato,:idEndereco)");
 
                         $stmt->execute([':nomeInstituicao'=>$nomeInstituicao,
-                                                ':fotoInstituicao'=>$fotoInstituicao,
+                                                ':fotoInstituicao'=>$imagem,
                                                 ':cnpj'=>$cnpj,
                                                 ':senha'=>password_hash($senha, PASSWORD_DEFAULT),
                                                 ':idContato'=>$idContato,

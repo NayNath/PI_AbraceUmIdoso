@@ -62,11 +62,8 @@
     <main>
         <div class="perfil-container">
             <div class="foto">
-                <p><?= htmlspecialchars($dados['fotoPerfil']) ?></p>
-                <?php if(isset($erros['confirmarSenha'])): ?>
-                    <?php var_dump($dados['fotoPerfil']); ?>
-                <?php endif; ?>
-                
+                <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>" 
+                    alt="Foto de <?php echo htmlspecialchars($dados['nomePessoa']); ?>">
             </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>

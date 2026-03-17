@@ -53,15 +53,12 @@
 
             inputFoto.addEventListener('change', function() {
                 const arquivo = this.files[0]; // Pega o arquivo selecionado
-
                 if (arquivo) {
                     const leitor = new FileReader();
-
                     leitor.onload = function(e) {
                         // Atualiza o src da imagem com o conteúdo do arquivo
                         previewImg.src = e.target.result;
                     }
-
                     leitor.readAsDataURL(arquivo);
                 }
             });

@@ -7,12 +7,12 @@ require "../conexao/conexao.php";
 require "../class/ValidarEntradas.php";
 
 $validar = new ValidarEntradas();
- 
+
 if($_SERVER['REQUEST_METHOD']==='POST'){
         $nomePessoa = trim(ucwords($_POST['nomePessoa']));
         $cpf = trim($_POST['cpf']);
         $dataNascimento = trim($_POST['dataNascimento']);
-        $fotoPerfil = trim($_POST['fotoPerfil']);
+        $fotoPerfil = $_FILES['fotoPerfil'];
         $sobre = trim($_POST['sobre']);
         $celular = trim($_POST['celular']);;
         $email = trim($_POST['email']);
@@ -22,7 +22,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
         $nomeLogradouro = trim(ucwords($_POST['nomeLogradouro']));
-        $tipoLogradouro = "null";//trim($_POST['tipoLogradouro']);
+        $tipoLogradouro = null;//trim($_POST['tipoLogradouro']);
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
@@ -30,22 +30,25 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $resetToken = null;
         $tokenExpira = null;
 
+        // ---------------------------------------- Enviar imagem ----------------------------------------
+        $imagem = null;
 
-        if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === 0){
-                if (!is_dir('./../assets/img/uploads/')){
-                        mkdir('./../assets/img/uploads/', 0777, true); 
-                } 
-                $extensao = pathinfo($_FILES['fotoPerfil']['name'], PATHINFO_EXTENSION);
-                $nomeArquivo = uniqid() . "." . $extensao; 
-                $caminho = "./../assets/img/uploads/" .
-                $nomeArquivo; 
-                if (move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $caminho)){
-                        $imagem = $nomeArquivo; 
-        } else { 
-                echo "<script>alert('Erro ao salvar a imagem!');</script>"; 
-                } 
+        if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === 0) {
+                $dir = "./../assets/img/uploads/";
+        if (!is_dir($dir)) mkdir($dir, 0755, true);
+                $ext = strtolower(pathinfo($_FILES['fotoPerfil']['name'], PATHINFO_EXTENSION));
+                $permitidas = ['jpg','jpeg','png','gif'];
+        if (!in_array($ext, $permitidas)) {
+            die("Formato de imagem inválido");
         }
-   
+        $nomeArquivo = uniqid() . "." . $ext;
+        $caminho = $dir . $nomeArquivo;
+        if (!move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $caminho)) {
+            die("Erro ao salvar imagem");
+        }
+        $imagem = $nomeArquivo;
+        }
+        
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         $validar->obrigatorio('nomePessoa',$nomePessoa);
         $validar->obrigatorio('cpf',$cpf);
@@ -65,7 +68,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         // ---------------------------------------- Checar tamanho maximo ----------------------------------------
         $validar->tamanhoMax('nomePessoa',$nomePessoa, 50);
-        //$validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
         $validar->tamanhoMax('sobre',$sobre, 150);
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
@@ -104,7 +106,9 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         if($validar->temErros()){
                         $erros = $validar->getErros();
-                        header("Location: cadastroVoluntario.html");
+                        //header("Location: cadastroVoluntario.html");
+                        var_dump($validar->getErros());
+                        exit;
         }else{
                 try{
                 /*======================================================PESSOAS======================================================*/
@@ -116,7 +120,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $stmt->execute([':nomePessoa'=>$nomePessoa,
                                                 ':cpf'=>$cpf,
                                                 ':dataNascimento'=>$dataNascimento,
-                                                ':fotoPerfil'=>$fotoPerfil,
+                                                ':fotoPerfil'=>$imagem,
                                                 ':sobre'=>$sobre]);
                         if(!$stmt->rowCount()){
                         throw new Exception("Erro ao inserir em pessoas");
@@ -164,8 +168,10 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $pdo->commit();
                         session_start();
                         $idVoluntario = $_SESSION['idVoluntario'];
+                        
                         header("Location: loginFake.html");
                         session_destroy();
+
 
                 } catch (Exception $e) {
                         $pdo->rollBack();
