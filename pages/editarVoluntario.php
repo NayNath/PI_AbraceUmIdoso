@@ -1,9 +1,14 @@
 <?php
 //123456*Ty bad@gmail.com
+
+use function PHPSTORM_META\elementType;
+
     session_start();
     require "../restricao.php";
     require_once "../conexao/conexao.php";
+    require "../class/ValidarEntradas.php";
 
+    $validar = new ValidarEntradas();
     $idVoluntario = $_SESSION['idVoluntario'];
 
     $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
@@ -22,7 +27,7 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //$fotoPerfil = trim($_POST['fotoPerfil']);
-        $sobre = trim($_POST['sobre']);
+        //$sobre = trim($_POST['sobre']);
         $celular = trim($_POST['celular']);;
         $email = trim($_POST['email']);
         $telefone = trim($_POST['telefone']);
@@ -30,31 +35,31 @@
         $cidade = trim(ucwords($_POST['cidade']));
         $bairro = trim(ucwords($_POST['bairro']));
         $estado = trim($_POST['estado']);
-        $nomeLogradouro = trim(ucwords($_POST['$nomeLogradouro']));
+        $nomeLogradouro = trim(ucwords($_POST['nomeLogradouro']));
         $numero = trim($_POST['numero']);
         $complemento = trim($_POST['complemento']);
         $senha = trim($_POST['senha']);
 
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         //$validar->obrigatorio('fotoPerfil',$fotoPerfil);
-        $validar->obrigatorio('sobre',$sobre);
+        //$validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
         $validar->obrigatorio('email',$email);
         $validar->obrigatorio('cep',$cep);
         $validar->obrigatorio('cidade',$cidade);
         $validar->obrigatorio('bairro',$bairro);
         $validar->obrigatorio('estado',$estado);
-        $validar->obrigatorio('rua',$rua);
+        $validar->obrigatorio('nomeLogradouro',$nomeLogradouro);
         $validar->obrigatorio('numero',$numero);
         $validar->obrigatorio('senha',$senha);
 
         // ---------------------------------------- Checar tamanho maximo ----------------------------------------
         //$validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
-        $validar->tamanhoMax('sobre',$sobre, 150);
+        //$validar->tamanhoMax('sobre',$sobre, 150);
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
         $validar->tamanhoMax('bairro',$bairro, 50);
-        $validar->tamanhoMax('rua',$rua, 50);
+        $validar->tamanhoMax('nomeLogradouro',$nomeLogradouro, 50);
         $validar->tamanhoMax('numero',$numero, 6);
         $validar->tamanhoMax('senha',$senha, 45);
 
@@ -77,17 +82,18 @@
         $validar->stringSemNumero('estado',$estado);
 
         // ---------------------------------------- Checar Senha ----------------------------------------
-        $validar->senha($senha, $confirmarSenha);
+        //$validar->senha($senha, $confirmarSenha);
 
         if($validar->temErros()){
                 $erros = $validar->getErros();
-                header("Location: editarVoluntario.php");
+                var_dump($erros);
+                //header("Location: editarVoluntario.php");
         }else{
                 try{
 
                 /*======================================================PESSOAS======================================================*/      
                     $pdo->beginTransaction();
-                    $stmt = $pdo->prepare("UPDADTE pessoa 
+                    /*$stmt = $pdo->prepare("UPDATE pessoa 
                                                     SET sobre = :sobre,
                                                     fotoPerfil = :fotoPerfil
                                                     WHERE idVoluntario = :id");
@@ -98,10 +104,10 @@
                                                 ':fotoPerfil'=> $fotoPerfil,
                                                 ':sobre'=> $sobre]);
 
-                    $idPessoa = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
+                    $idPessoa = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido*/
 
                 /*======================================================CONTATOS======================================================*/                            
-                        $stmt = $pdo->prepare("UPDADTE contato
+                        $stmt = $pdo->prepare("UPDATE contato
                                                         SET email = :email,
                                                         celular = :celular
                                                         telefone = :telefone
@@ -115,13 +121,13 @@
 
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("UPDADTE endereco
+                        $stmt = $pdo->prepare("UPDATE endereco
                                                         SET cep = :cep,
                                                         estado = :estado
                                                         cidade = :cidade
                                                         bairro = :bairro
                                                         numero = :numero
-                                                        rua = :rua
+                                                        nomeLogradouro = :nomeLogradouro
                                                         complemento = :complemento
                                                         WHERE idVoluntario = :id");
 
@@ -138,7 +144,7 @@
                         $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
 
                 /*======================================================ENDERECOS======================================================*/        
-                        $stmt = $pdo->prepare("UPDADTE contato
+                        /*$stmt = $pdo->prepare("UPDATE contato
                                                         SET senha = :senha,
                                                         WHERE idVoluntario = :id");
 
@@ -147,7 +153,7 @@
                                                 ':idEndereco'=>$idEndereco,
                                                 ':idPessoa'=>$idPessoa]);
                        
-                        $idVoluntario = $pdo->lastInsertId();
+                        $idVoluntario = $pdo->lastInsertId();*/
 
                         $pdo->commit();
                         header("Location: perfilVoluntario.php");
@@ -199,7 +205,6 @@
 </header>
 
     <body>
-
    <main>
         <div class="perfil-container">
             <div class="foto">
@@ -209,23 +214,23 @@
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
 
-            
-            <div class="bio-box">
-                <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br></div>
-                <p><?= htmlspecialchars($dados['sobre']) ?></p>
-            </div>
+            <form action="editarVoluntario.php" method="post">
+                <div class="bio-box">
+                    <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br></div>
+                    <p><?= htmlspecialchars($dados['sobre']) ?></p>
+                </div>
 
-            <h3>Informações pessoais:</h3>
+                <h3>Informações pessoais:</h3>
 
-            <?php
-            // Função para mostrar campo, evita erros se dados faltarem
-            function mostraCampo($label, $valor, $linkEditar) {
-                $valor = htmlspecialchars($valor ?? '');
-                echo "<div class='info-box'>
-                        <span class='label'>$label</span>
-                        <span class='valor'>$valor</span>
-                      </div>";
-            }?>
+                <?php
+                // Função para mostrar campo, evita erros se dados faltarem
+                function mostraCampo($label, $valor, $linkEditar) {
+                    $valor = htmlspecialchars($valor ?? '');
+                    echo "<div class='info-box'>
+                            <span class='label'>$label</span>
+                            <span class='valor'>$valor</span>
+                        </div>";
+                }?>
                 <div class="input-grupo"><label for="email">E-mail:</label>
                 <input type="email" name="email" id="email" value="<?= $dados['email'] ?>"></div>
                 <div class="input-grupo"><label for="celular">Celular:</label><input type="tel" name="celular" id="celular" maxlength="12" value="<?=$dados['celular']?>"></div>
@@ -268,7 +273,7 @@
                 </div>
 
                 <div class="input-linha">
-                    <div class="input-grupo input-grande"><label for="rua">Rua:</label><input type="text" name="rua" id="rua" value="<?=$dados['rua']?>"></div>
+                    <div class="input-grupo input-grande"><label for="nomeLogradouro">Rua:</label><input type="text" name="nomeLogradouro" id="nomeLogradouro" value="<?=$dados['nomeLogradouro']?>"></div>
                     <div class="input-grupo input-mini"><label for="numero">Número:</label><input type="text" name="numero" id="numero" value="<?=$dados['numero']?>"></div>
                     <div class="input-grupo input-grande"><label for="complemento">Complemento:</label><input type="text" name="complemento" id="complemento" value="<?=$dados['complemento']?>"></div>
                 </div>

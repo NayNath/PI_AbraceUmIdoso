@@ -106,9 +106,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         if($validar->temErros()){
                         $erros = $validar->getErros();
-                        //header("Location: cadastroVoluntario.html");
-                        var_dump($validar->getErros());
-                        exit;
+                        header("Location: cadastroVoluntario.html");
         }else{
                 try{
                 /*======================================================PESSOAS======================================================*/
@@ -171,7 +169,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         
                         header("Location: loginFake.html");
                         session_destroy();
-
 
                 } catch (Exception $e) {
                         $pdo->rollBack();
