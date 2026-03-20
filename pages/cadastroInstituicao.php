@@ -1,5 +1,4 @@
 <?php
-session_start();
 require "../conexao/conexao.php";
 //require "../class/Contatos.php";
 //require "../class/Enderecos.php";

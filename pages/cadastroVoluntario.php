@@ -1,5 +1,4 @@
 <?php
-session_start();
 require "../conexao/conexao.php";
 //require "../class/Pessoas.php";
 //require "../class/Contatos.php";
@@ -53,7 +52,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $validar->obrigatorio('nomePessoa',$nomePessoa);
         $validar->obrigatorio('cpf',$cpf);
         $validar->obrigatorio('dataNascimento',$dataNascimento);
-        //$validar->obrigatorio('fotoPerfil',$fotoPerfil);
+        $validar->obrigatorio('fotoPerfil',$fotoPerfil);
         $validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
         $validar->obrigatorio('email',$email);
