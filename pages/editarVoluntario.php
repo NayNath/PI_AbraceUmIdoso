@@ -2,17 +2,9 @@
 //123456*Ty bad@gmail.com
     session_start();
     require "../restricao.php";
-    require_once "../conexao/conexao.php";
-    require "../class/ValidarEntradas.php";
+    require "../conexao/conexao.php";
 
-    $validar = new ValidarEntradas();
     $idVoluntario = $_SESSION['idVoluntario'];
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':ididVoluntario',$idVoluntario);
-    $stmt->execute();
-    $dados = $stmt->fetch(PDO::FETCH_ASSOC);
-
 
     $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
         e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
@@ -21,10 +13,13 @@
         INNER JOIN contato c ON v.idContato = c.idContato
         INNER JOIN endereco e ON v.idEndereco = e.idEndereco
         WHERE v.idVoluntario = :id";
-        
-    
 
-    
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id',$idVoluntario);
+    $stmt->execute();
+
+    $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //$fotoPerfil = trim($_POST['fotoPerfil']);
         //$sobre = trim($_POST['sobre']);
@@ -207,9 +202,9 @@
     <body>
    <main>
         <div class="perfil-container">
-            <div class="foto">
+            <div class="fotoPerfil">
                 <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>" 
-                    alt="Foto de <?php echo htmlspecialchars($dados['nomePessoa']); ?>"width="150">
+                    alt="Foto de <?php echo htmlspecialchars($dados['idVoluntario']); ?>">
             </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
