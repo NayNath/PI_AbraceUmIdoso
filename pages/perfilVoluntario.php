@@ -61,9 +61,9 @@
     <body>
     <main>
         <div class="perfil-container">
-            <div class="foto">
-                <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>" 
-                    alt="Foto de <?php echo htmlspecialchars($dados['nomePessoa']); ?>"width="150">
+            <div class="fotoPerfil">
+                <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>"
+                 alt="Foto de <?php echo htmlspecialchars($dados['idVoluntario']); ?>">
             </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>

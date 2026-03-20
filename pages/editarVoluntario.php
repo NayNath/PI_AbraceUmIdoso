@@ -1,8 +1,5 @@
 <?php
 //123456*Ty bad@gmail.com
-
-use function PHPSTORM_META\elementType;
-
     session_start();
     require "../restricao.php";
     require_once "../conexao/conexao.php";
@@ -10,6 +7,12 @@ use function PHPSTORM_META\elementType;
 
     $validar = new ValidarEntradas();
     $idVoluntario = $_SESSION['idVoluntario'];
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':ididVoluntario',$idVoluntario);
+    $stmt->execute();
+    $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
     $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
         e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
@@ -19,12 +22,9 @@ use function PHPSTORM_META\elementType;
         INNER JOIN endereco e ON v.idEndereco = e.idEndereco
         WHERE v.idVoluntario = :id";
         
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id',$idVoluntario);
-    $stmt->execute();
+    
 
-    $dados = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //$fotoPerfil = trim($_POST['fotoPerfil']);
         //$sobre = trim($_POST['sobre']);
