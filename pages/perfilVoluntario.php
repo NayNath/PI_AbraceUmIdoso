@@ -5,19 +5,21 @@
 
     $idVoluntario = $_SESSION['idVoluntario'];
 
-    $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
-        e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
+$sql = "SELECT p.idPessoa, p.nomePessoa, p.fotoPerfil, p.sobre, c.idContato, c.email, c.telefone, c.celular,
+        e.idEndereco, e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
         FROM voluntario v
         INNER JOIN pessoa p ON v.idPessoa = p.idPessoa
         INNER JOIN contato c ON v.idContato = c.idContato
         INNER JOIN endereco e ON v.idEndereco = e.idEndereco
-        WHERE v.idVoluntario = :id";
+        WHERE v.idVoluntario = :idVoluntario";
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id',$idVoluntario);
-    $stmt->execute();
-
+    $stmt = $pdo->prepare($sql);    
+    $stmt->execute([ ':idVoluntario'=>$idVoluntario]);
     $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $idPessoa   = $dados['idPessoa'];
+    $idContato  = $dados['idContato'];
+    $idEndereco = $dados['idEndereco'];
 ?>
 
 <!DOCTYPE html>
@@ -62,12 +64,11 @@
     <main>
         <div class="perfil-container">
             <div class="fotoPerfil">
-                <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>"
-                 alt="Foto de <?php echo htmlspecialchars($dados['idVoluntario']); ?>">
+                <img src="./../assets/img/uploads/<?php var_dump($dados['fotoPerfil']);?>"
+                 alt="Foto de <?php echo htmlspecialchars($dados['idPessoa']); ?>">
             </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
-
             
             <div class="bio-box">
                 <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br></div>

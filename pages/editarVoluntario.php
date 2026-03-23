@@ -3,26 +3,32 @@
     session_start();
     require "../restricao.php";
     require "../conexao/conexao.php";
+    require "../class/ValidarEntradas.php";
 
     $idVoluntario = $_SESSION['idVoluntario'];
+    $validar = new ValidarEntradas();
 
-    $sql = "SELECT p.nomePessoa,p.fotoPerfil, p.sobre, c.email, c.telefone, c.celular,
-        e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "SELECT p.idPessoa, p.nomePessoa, p.fotoPerfil, p.sobre, c.idContato, c.email, c.telefone, c.celular,
+        e.idEndereco, e.cep, e.cidade, e.estado, e.bairro, e.nomeLogradouro, e.numero, e.complemento
         FROM voluntario v
         INNER JOIN pessoa p ON v.idPessoa = p.idPessoa
         INNER JOIN contato c ON v.idContato = c.idContato
         INNER JOIN endereco e ON v.idEndereco = e.idEndereco
-        WHERE v.idVoluntario = :id";
+        WHERE v.idVoluntario = :idVoluntario";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id',$idVoluntario);
-    $stmt->execute();
-
+    $stmt->execute([ ':idVoluntario'=>$idVoluntario]);
     $dados = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $idPessoa   = $dados['idPessoa'];
+    $idContato  = $dados['idContato'];
+    $idEndereco = $dados['idEndereco'];
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        //$fotoPerfil = trim($_POST['fotoPerfil']);
-        //$sobre = trim($_POST['sobre']);
+        $fotoPerfil = $_FILES['fotoPerfil'];
+        $sobre = trim($_POST['sobre']);
         $celular = trim($_POST['celular']);;
         $email = trim($_POST['email']);
         $telefone = trim($_POST['telefone']);
@@ -37,7 +43,7 @@
 
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         //$validar->obrigatorio('fotoPerfil',$fotoPerfil);
-        //$validar->obrigatorio('sobre',$sobre);
+        $validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
         $validar->obrigatorio('email',$email);
         $validar->obrigatorio('cep',$cep);
@@ -46,17 +52,15 @@
         $validar->obrigatorio('estado',$estado);
         $validar->obrigatorio('nomeLogradouro',$nomeLogradouro);
         $validar->obrigatorio('numero',$numero);
-        $validar->obrigatorio('senha',$senha);
+        //$validar->obrigatorio('senha',$senha);
 
         // ---------------------------------------- Checar tamanho maximo ----------------------------------------
-        //$validar->tamanhoMax('fotoPerfil',$fotoPerfil,250);
-        //$validar->tamanhoMax('sobre',$sobre, 150);
+        $validar->tamanhoMax('sobre',$sobre, 150);
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
         $validar->tamanhoMax('bairro',$bairro, 50);
         $validar->tamanhoMax('nomeLogradouro',$nomeLogradouro, 50);
         $validar->tamanhoMax('numero',$numero, 6);
-        $validar->tamanhoMax('senha',$senha, 45);
 
         // ---------------------------------------- Checar se o campo é numérico ----------------------------------------
         $validar->numero('celular',$celular);
@@ -88,73 +92,65 @@
 
                 /*======================================================PESSOAS======================================================*/      
                     $pdo->beginTransaction();
-                    /*$stmt = $pdo->prepare("UPDATE pessoa 
+                    $stmt = $pdo->prepare("UPDATE pessoa 
                                                     SET sobre = :sobre,
                                                     fotoPerfil = :fotoPerfil
-                                                    WHERE idVoluntario = :id");
+                                                    WHERE idPessoa = :idPessoa");
 
-                    $stmt->execute([':nomePessoa' => $nomePessoa,
-                                                ':cpf'=>$cpf,
-                                                ':dataNascimento'=> $dataNascimento,
-                                                ':fotoPerfil'=> $fotoPerfil,
-                                                ':sobre'=> $sobre]);
-
-                    $idPessoa = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido*/
+                    $stmt->execute([':fotoPerfil'=> $fotoPerfil,
+                                                ':sobre'=> $sobre,
+                                                ':idPessoa'=> $idPessoa]);
 
                 /*======================================================CONTATOS======================================================*/                            
                         $stmt = $pdo->prepare("UPDATE contato
                                                         SET email = :email,
-                                                        celular = :celular
+                                                        celular = :celular,
                                                         telefone = :telefone
-                                                        WHERE idVoluntario = :id");
+                                                        WHERE idContato = :idContato");
          
                         $stmt->execute([':email'=>$email,
                                                 ':celular'=>$celular,
-                                                ':telefone'=>$telefone]);
-
-                        $idContatos = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
-
+                                                ':telefone'=>$telefone,
+                                                ':idContato'=>$idContato]);
 
                 /*======================================================ENDERECOS======================================================*/        
                         $stmt = $pdo->prepare("UPDATE endereco
                                                         SET cep = :cep,
-                                                        estado = :estado
-                                                        cidade = :cidade
-                                                        bairro = :bairro
-                                                        numero = :numero
-                                                        nomeLogradouro = :nomeLogradouro
+                                                        estado = :estado,
+                                                        cidade = :cidade,
+                                                        bairro = :bairro,
+                                                        numero = :numero,
+                                                        nomeLogradouro = :nomeLogradouro,
                                                         complemento = :complemento
-                                                        WHERE idVoluntario = :id");
+                                                        WHERE idEndereco = :idEndereco");
 
                         $stmt->execute([':cep'=>$cep,
                                                 ':estado'=>$estado,
                                                 ':cidade'=>$cidade,
                                                 ':bairro'=>$bairro,
                                                 ':numero'=>$numero,
-                                                ':rua'=>$rua,
                                                 ':nomeLogradouro'=>$nomeLogradouro,
-                                                ':tipoLogradouro'=>$tipoLogradouro,
-                                                ':complemento'=>$complemento]);
-                                       
-                        $idEndereco = $pdo->lastInsertId();//Retorna o ID da última linha ou valor de sequência inserido
-
+                                                ':complemento'=>$complemento,
+                                                ':idEndereco'=>$idEndereco]);
+                    
                 /*======================================================ENDERECOS======================================================*/        
                         /*$stmt = $pdo->prepare("UPDATE contato
-                                                        SET senha = :senha,
-                                                        WHERE idVoluntario = :id");
+                                                        SET senha = :senha
+                                                        WHERE idVoluntario = :idVoluntario");
 
                         $stmt->execute([':senha'=>password_hash($senha, PASSWORD_DEFAULT),
                                                 ':idContato'=>$idContato,
                                                 ':idEndereco'=>$idEndereco,
-                                                ':idPessoa'=>$idPessoa]);
-                       
-                        $idVoluntario = $pdo->lastInsertId();*/
+                                                ':idPessoa'=>$idPessoa,
+                                                ':resetToken'=>$resetToken,
+                                                ':tokenExpira'=>$tokenExpira]);*/
 
                         $pdo->commit();
                         header("Location: perfilVoluntario.php");
+                        exit;
                 } catch (Exception $e) {
                         $pdo->rollBack();
-                        echo $e->getMessage();
+                        echo "ERRO: ".$e->getMessage();
                 }
         }
 
@@ -204,15 +200,15 @@
         <div class="perfil-container">
             <div class="fotoPerfil">
                 <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>" 
-                    alt="Foto de <?php echo htmlspecialchars($dados['idVoluntario']); ?>">
+                    alt="Foto de <?php echo htmlspecialchars($dados['idPessoa']); ?>">
             </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
 
             <form action="editarVoluntario.php" method="post">
                 <div class="bio-box">
-                    <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br></div>
-                    <p><?= htmlspecialchars($dados['sobre']) ?></p>
+                    <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br>
+                    <textarea type="text" name="sobre" id="sobre" value="<?= $dados['sobre'] ?>"></textarea></div>
                 </div>
 
                 <h3>Informações pessoais:</h3>
