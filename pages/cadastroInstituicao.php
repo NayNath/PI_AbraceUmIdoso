@@ -60,7 +60,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
         // ---------------------------------------- Checar tamanho maximo ----------------------------------------
         $validar->tamanhoMax('nomeInstituicao',$nomeInstituicao, 50);
-        $validar->tamanhoMax('fotoInstituicao',$fotoInstituicao,250);
         $validar->tamanhoMax('email',$email,50);
         $validar->tamanhoMax('cidade',$cidade, 50);
         $validar->tamanhoMax('bairro',$bairro, 50);
@@ -135,6 +134,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                        
                         $idInstituicao = $pdo->lastInsertId();
                         $pdo->commit();
+                        header("Location: loginFake.html");
                         
                 } catch (Exception $e) {
                         $pdo->rollBack();

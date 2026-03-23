@@ -163,11 +163,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                        
                         $idVoluntario = $pdo->lastInsertId();
                         $pdo->commit();
-                        session_start();
-                        $idVoluntario = $_SESSION['idVoluntario'];
-                        
                         header("Location: loginFake.html");
-                        session_destroy();
 
                 } catch (Exception $e) {
                         $pdo->rollBack();
