@@ -206,11 +206,9 @@
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
 
             <form action="editarVoluntario.php" method="post">
-                <div class="bio-box">
-                    <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br>
-                    <textarea type="text" name="sobre" id="sobre" value="<?= $dados['sobre'] ?>"></textarea></div>
-                </div>
-
+                <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br>
+                <textarea type="text" name="sobre" id="sobre"><?= htmlspecialchars($dados['sobre']);?></textarea></div>
+                
                 <h3>Informações pessoais:</h3>
 
                 <?php

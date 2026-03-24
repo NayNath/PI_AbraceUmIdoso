@@ -53,6 +53,18 @@ h3{
     border: 1px solid #c8b99c; /* Borda mais suave */
 
 }
+textarea{
+    display:flex;
+    align-items:center;
+    background:#fff;
+    border:1px solid #5f3a24;
+    margin-bottom:8px;
+    border-radius:5px;
+    border: 1px solid #c8b99c;
+    width: 100%; /* Define a largura para metade (50%) do seu contêiner pai */
+    resize: none;
+    padding: 15px 230px; 
+}
 input{
     width: 100%;
     padding: 10px 15px; /* Padding ajustado */
