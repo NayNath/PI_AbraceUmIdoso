@@ -28,25 +28,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $confirmarSenha = trim($_POST['confirmarSenha']);
         $resetToken = null;
         $tokenExpira = null;
-
-        // ---------------------------------------- Enviar imagem ----------------------------------------
-        $imagem = null;
-
-        if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === 0) {
-                $dir = "./../assets/img/uploads/";
-        if (!is_dir($dir)) mkdir($dir, 0755, true);
-                $ext = strtolower(pathinfo($_FILES['fotoPerfil']['name'], PATHINFO_EXTENSION));
-                $permitidas = ['jpg','jpeg','png','gif'];
-        if (!in_array($ext, $permitidas)) {
-            die("Formato de imagem inválido");
-        }
-        $nomeArquivo = uniqid() . "." . $ext;
-        $caminho = $dir . $nomeArquivo;
-        if (!move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $caminho)) {
-            die("Erro ao salvar imagem");
-        }
-        $imagem = $nomeArquivo;
-        }
         
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
         $validar->obrigatorio('nomePessoa',$nomePessoa);
@@ -108,6 +89,24 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         header("Location: cadastroVoluntario.html");
         }else{
                 try{
+                        // ---------------------------------------- Enviar imagem ----------------------------------------
+                        $imagem = null;
+
+                        if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === 0) {
+                                $dir = "./../assets/img/uploads/";
+                        if (!is_dir($dir)) mkdir($dir, 0755, true);
+                                $ext = strtolower(pathinfo($_FILES['fotoPerfil']['name'], PATHINFO_EXTENSION));
+                                $permitidas = ['jpg','jpeg','png','gif'];
+                        if (!in_array($ext, $permitidas)) {
+                        die("Formato de imagem inválido");
+                        }
+                        $nomeArquivo = uniqid() . "." . $ext;
+                        $caminho = $dir . $nomeArquivo;
+                        if (!move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $caminho)) {
+                        die("Erro ao salvar imagem");
+                        }
+                        $imagem = $nomeArquivo;
+                        }
                 /*======================================================PESSOAS======================================================*/
                         $pdo->beginTransaction();
 
@@ -164,6 +163,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                         $idVoluntario = $pdo->lastInsertId();
                         $pdo->commit();
                         header("Location: loginFake.html");
+                        exit;
 
                 } catch (Exception $e) {
                         $pdo->rollBack();

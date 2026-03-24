@@ -42,7 +42,7 @@
         $senha = trim($_POST['senha']);
 
         // ---------------------------------------- Checar se os campos estão preenchidos ----------------------------------------
-        //$validar->obrigatorio('fotoPerfil',$fotoPerfil);
+        $validar->obrigatorio('fotoPerfil',$fotoPerfil);
         $validar->obrigatorio('sobre',$sobre);
         $validar->obrigatorio('celular',$celular);
         $validar->obrigatorio('email',$email);
@@ -89,7 +89,24 @@
                 //header("Location: editarVoluntario.php");
         }else{
                 try{
+                    // ---------------------------------------- Enviar imagem ----------------------------------------
+                    $imagem = null;
 
+                    if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === 0) {
+                            $dir = "./../assets/img/uploads/";
+                    if (!is_dir($dir)) mkdir($dir, 0755, true);
+                            $ext = strtolower(pathinfo($_FILES['fotoPerfil']['name'], PATHINFO_EXTENSION));
+                            $permitidas = ['jpg','jpeg','png','gif'];
+                    if (!in_array($ext, $permitidas)) {
+                    die("Formato de imagem inválido");
+                    }
+                    $nomeArquivo = uniqid() . "." . $ext;
+                    $caminho = $dir . $nomeArquivo;
+                    if (!move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $caminho)) {
+                    die("Erro ao salvar imagem");
+                    }
+                    $imagem = $nomeArquivo;
+                    }
                 /*======================================================PESSOAS======================================================*/      
                     $pdo->beginTransaction();
                     $stmt = $pdo->prepare("UPDATE pessoa 
@@ -97,7 +114,7 @@
                                                     fotoPerfil = :fotoPerfil
                                                     WHERE idPessoa = :idPessoa");
 
-                    $stmt->execute([':fotoPerfil'=> $fotoPerfil,
+                    $stmt->execute([':fotoPerfil'=> $imagem,
                                                 ':sobre'=> $sobre,
                                                 ':idPessoa'=> $idPessoa]);
 
@@ -141,9 +158,7 @@
                         $stmt->execute([':senha'=>password_hash($senha, PASSWORD_DEFAULT),
                                                 ':idContato'=>$idContato,
                                                 ':idEndereco'=>$idEndereco,
-                                                ':idPessoa'=>$idPessoa,
-                                                ':resetToken'=>$resetToken,
-                                                ':tokenExpira'=>$tokenExpira]);*/
+                                                ':idPessoa'=>$idPessoa,]);*/
 
                         $pdo->commit();
                         header("Location: perfilVoluntario.php");
@@ -198,14 +213,40 @@
     <body>
    <main>
         <div class="perfil-container">
-            <div class="fotoPerfil">
-                <img src="./../assets/img/uploads/<?php echo $dados['fotoPerfil']; ?>" 
-                    alt="Foto de <?php echo htmlspecialchars($dados['idPessoa']); ?>">
-            </div>
+           
+            <form action="editarVoluntario.php" method="post" enctype="multipart/form-data">
+             <div class="coluna-esquerda-foto">
+                    <div class="foto-perfil-container">
+                        <label for="fotoPerfil">
+                            <img 
+                                src="./../assets/img/uploads/<?= !empty($dados['fotoPerfil']) ? htmlspecialchars($dados['fotoPerfil']) : 'fotoPerfil.png'; ?>" 
+                                alt="Foto de <?= htmlspecialchars($dados['idPessoa']); ?>" 
+                                id="preview-img"
+                                style="cursor:pointer;"
+                            >
+                            <div class="icone-adicionar"></div>
+                        </label>
+                    </div>
+                    <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" required style="display: none;">
+                </div>
+                <script>
+                    const inputFoto = document.getElementById('fotoPerfil');
+                    const previewImg = document.getElementById('preview-img');
+                    inputFoto.addEventListener('change', function() {
+                        const arquivo = this.files[0]; // Pega o arquivo selecionado
+                        if (arquivo) {
+                            const leitor = new FileReader();
+                            leitor.onload = function(e) {
+                                // Atualiza o src da imagem com o conteúdo do arquivo
+                                previewImg.src = e.target.result;
+                            }
+                            leitor.readAsDataURL(arquivo);
+                        }
+                    });
+                </script>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
 
-            <form action="editarVoluntario.php" method="post">
                 <div class="titulo-sobre-mim"><label for="sobre-mim">Sobre Mim:</label><br>
                 <textarea type="text" name="sobre" id="sobre"><?= htmlspecialchars($dados['sobre']);?></textarea></div>
                 
@@ -266,13 +307,14 @@
                     <div class="input-grupo input-mini"><label for="numero">Número:</label><input type="text" name="numero" id="numero" value="<?=$dados['numero']?>"></div>
                     <div class="input-grupo input-grande"><label for="complemento">Complemento:</label><input type="text" name="complemento" id="complemento" value="<?=$dados['complemento']?>"></div>
                 </div>
-                <div class="input-grupo"><label for="senha">Senha:</label><input type="password" name="senha" id="senha" value="<?=$dados['senha']?>"></div>
-
-                <button type="submit" class="btn btn-marrom">Salvar</button><br>
+                <div class="info-box">
+                    <span class="label">Senha:</span>
+                    <span class="valor">********</span>
+                </div>
+                
+                <button type="submit" class="btn btn-marrom">Salvar</button>
             </form>
-            <div class="botoes">
-                <li><a class="btn-azul" href="perfilVoluntario.php">Cancelar</a></li>
-            </div>
+                <a class="btn-azul" href="perfilVoluntario.php">Cancelar</a>
         </div>
     </main>
 </div>

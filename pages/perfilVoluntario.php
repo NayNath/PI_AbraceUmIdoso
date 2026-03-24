@@ -17,7 +17,7 @@ $sql = "SELECT p.idPessoa, p.nomePessoa, p.fotoPerfil, p.sobre, c.idContato, c.e
     $stmt->execute([ ':idVoluntario'=>$idVoluntario]);
     $dados = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $idPessoa   = $dados['idPessoa'];
+    $idPessoa = $dados['idPessoa'];
     $idContato  = $dados['idContato'];
     $idEndereco = $dados['idEndereco'];
 ?>
@@ -63,9 +63,9 @@ $sql = "SELECT p.idPessoa, p.nomePessoa, p.fotoPerfil, p.sobre, c.idContato, c.e
     <body>
     <main>
         <div class="perfil-container">
-            <div class="fotoPerfil">
-                <img src="./../assets/img/uploads/<?php var_dump($dados['fotoPerfil']);?>"
-                 alt="Foto de <?php echo htmlspecialchars($dados['idPessoa']); ?>">
+            <div class="fotoPerfil"> 
+                <img src="./../assets/img/uploads/<?= htmlspecialchars($dados['fotoPerfil']); ?>"
+                alt="Foto de <?= htmlspecialchars($dados['idPessoa']); ?>"> 
             </div>
 
             <h2><?= htmlspecialchars($dados['nomePessoa']) ?></h2>
